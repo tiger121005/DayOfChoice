@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyCuwbN5LkzWD5Q4bR0JrsADtcp-u8Q1ZGQ</string>
+	<key>GCM_SENDER_ID</key>
+	<string>137083241687</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.ito.taiga.DayOfChoice</string>
+	<key>PROJECT_ID</key>
+	<string>dayofchoice-c1b2a</string>
+	<key>STORAGE_BUCKET</key>
+	<string>dayofchoice-c1b2a.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:137083241687:ios:778efa6def5a61afdadc92</string>
+</dict>
+</plist>
