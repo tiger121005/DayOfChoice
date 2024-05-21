@@ -17,7 +17,8 @@ class ResultViewController: UIViewController {
     let material = Material.shared
     let screenWidth = UIScreen.main.bounds.width
     
-    var question: Question?
+    var question: Question!
+    var result: Result!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +29,11 @@ class ResultViewController: UIViewController {
                 return
             }
             questionLabel.text = question.question
+            
+            result = await questionFB.getPreResult()
+            guard let result else {
+                return
+            }
             setupGraph()
         }
     }
@@ -48,20 +54,20 @@ class ResultViewController: UIViewController {
         let maxHeight = graphHeight -  80
         let topPadding = CGFloat(40)
         
-        if question.number1 > question.number2 {
+        if result.number1 > result.number2 {
             bar1.frame = CGRect(x: barX,
                                 y: topPadding,
                                 width: barWidth,
                                 height: maxHeight)
             bar2.frame = CGRect(x: screenWidth - barX - barWidth, 
-                                y: topPadding + (maxHeight - (maxHeight * CGFloat(question.number2 / question.number1))),
+                                y: topPadding + (maxHeight - (maxHeight * CGFloat(result.number2 / result.number1))),
                                 width: barWidth,
-                                height: maxHeight * CGFloat((question.number2 / question.number1)))
+                                height: maxHeight * CGFloat((result.number2 / result.number1)))
         } else {
             bar1.frame = CGRect(x: barX,
-                                y: topPadding + (maxHeight - (maxHeight * CGFloat(question.number2 / question.number1))),
+                                y: topPadding + (maxHeight - (maxHeight * CGFloat(result.number2 / result.number1))),
                                 width: barWidth,
-                                height: maxHeight * CGFloat((question.number2 / question.number1)))
+                                height: maxHeight * CGFloat((result.number2 / result.number1)))
             bar2.frame = CGRect(x: screenWidth - barX - barWidth,
                                 y: topPadding,
                                 width: barWidth,

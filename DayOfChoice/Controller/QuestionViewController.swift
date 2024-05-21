@@ -15,6 +15,7 @@ class QuestionViewController: UIViewController {
     @IBOutlet var select2Btn: UIButton!
     @IBOutlet var voteBtn: UIButton!
     
+    let userFB = UserFirebase.shared
     let questionFB = QuestionFirebase.shared
     let utility = Utility.shared
     
@@ -24,25 +25,9 @@ class QuestionViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let handle = Auth.auth().addStateDidChangeListener { auth, user in
-            if let user = user {
-                print("yes")
-                // 認証済み
-            } else {
-                print("no")
-                Auth.auth().signInAnonymously { authResult, error in
-                    guard let user = authResult?.user else {
-                        print("Error login")
-                        return
-                    }
-                    let _ = user.isAnonymous
-                    let uid = user.uid
-                    UserDefaultsKey.uid.set(value: uid)
-                }
-            }
-        }
-        
         Task {
+            print("uid", UserDefaultsKey.uid.get())
+            
             voteBtn.isEnabled = false
             question = await questionFB.getQuestion()
             guard let question else {
@@ -52,7 +37,7 @@ class QuestionViewController: UIViewController {
             }
             questionLabel.text = question.question
             select1Btn.titleLabel?.text = question.select1
-            select2Btn.titleLabel?.text = question.select1
+            select2Btn.titleLabel?.text = question.select2
             select1Btn.isEnabled = true
             select2Btn.isEnabled = true
         }
@@ -70,9 +55,7 @@ class QuestionViewController: UIViewController {
     
     @IBAction func vote() {
         utility.vote(questionID: questionID, select: selectNum)
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MMdd"
-        UserDefaultsKey.preDay.set(value: dateFormatter.string(from: Date()))
+        
     }
    
 

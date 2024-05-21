@@ -12,6 +12,7 @@ public struct User: Codable {
     var name: String
     var friends: [Friends]
     var questions: [Question]
+    var minor: Int
     @DocumentID var id: String?
 }
 
@@ -19,16 +20,18 @@ public struct Question: Codable {
     let question: String
     let select1: String
     let select2: String
-    let number1: Int
-    let number2: Int
-    let year: Int
     @DocumentID var id: String?
 }
 
 public struct Answer: Codable {
-    let questionID: String
     var select: Int
-    let year: Int
+    @DocumentID var id: String?
+    
+}
+
+public struct Result: Codable {
+    let number1: Int
+    let number2: Int
 }
 
 public struct Friends: Codable {
@@ -40,7 +43,6 @@ public struct Friends: Codable {
 
 enum UserDefaultsKey: String {
     case uid = "uid"
-    case preDay = "preday"
     
     func get() -> String? {
         return UserDefaults.standard.string(forKey: self.rawValue)

@@ -18,6 +18,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
         
+        let userFB = UserFirebase.shared
+        
         Auth.auth().signInAnonymously { authResult, error in
             guard let user = authResult?.user else { 
                 print("Error login")
@@ -25,7 +27,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             let _ = user.isAnonymous
             let uid = user.uid
-            UserDefaultsKey.uid.set(value: uid)
+            if UserDefaultsKey.uid.get() == nil {
+                userFB.createUser(id: uid)
+                UserDefaultsKey.uid.set(value: uid)
+            }
+            
         }
         return true
         

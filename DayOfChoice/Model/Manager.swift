@@ -10,5 +10,6 @@ import Foundation
 struct Manager {
     static var shared = Manager()
     
-    var user: User = User(name: "no name", friends: [], questions: [])
+    var user: User = User(name: "no name", friends: [], questions: [], minor: 0)
+    var answers: [Answer] = []
 }

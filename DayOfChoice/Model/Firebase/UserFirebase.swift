@@ -18,69 +18,79 @@ class UserFirebase: ObservableObject {
     let db = Firestore.firestore()
     var userRef: DocumentReference!
     var answersRef: CollectionReference!
-    var userID: String!
     
     var manager = Manager.shared
     
-    func setupFirebase(id: String) {
-        userID = id
-        userRef = db.collection("user").document(id)
-        answersRef = db.collection("user").document(id).collection("answers")
-    }
-    
-    func createUser() {
-        db.collection("user").document(userID).setData([
-            "name": "no name",
-            "friends": [],
-            "answers": [],
-            "questions": []
-        ], completion: { err in
-            if let err {
-                print("Error create user")
-            } else {
-                print("Success create user")
-            }
-        })
+    func createUser(id: String) {
+        do {
+            try db.collection("user").document(id).setData(from: User(name: "no name", friends: [], questions: [], minor: 0))
+        } catch {
+            print("Error create user")
+        }
         
     }
     
-    func getUserInfo() async -> User? {
-        await withCheckedContinuation { continuation in
-            userRef.getDocument { (document, err) in
-                if let _err = err {
-                    print("Error getting user information: \(_err)")
-                    continuation.resume(returning: nil)
-                } else {
-                    if let document, document.exists {
-                        do {
-                            let user = try document.data(as: User.self)
-                            continuation.resume(returning: user)
-                        } catch {
-                            continuation.resume(returning: nil)
-                            print("Error getting user information: \(String(describing: err))")
-                        }
-                    } else {
-                        continuation.resume(returning: nil)
+    func getUserInfo(completion: @escaping (Any) -> Void) {
+        db.collection("user").document(UserDefaultsKey.uid.get() ?? "").getDocument { (document, err) in
+            if let err {
+                print("Error getting user information: \(err)")
+                completion(true)
+            } else {
+                if let document, document.exists {
+                    do {
+                        let user = try document.data(as: User.self)
+                        completion(true)
+                    } catch {
                         print("Error getting user information: \(String(describing: err))")
+                        completion(true)
                     }
+                } else {
+                    print("Error getting user information: \(String(describing: err))")
+                    completion(true)
                 }
             }
         }
     }
     
-    func addAnswer(questionID: String, select: Int) {
-        
-        answersRef.addDocument(data: [
-            "questionID": questionID,
-            "select": select,
-            "date": Timestamp(date: Date())
-        ]) { err in
-            if let err {
+    
+    func addAnswer(questionID: String, select: Int, completion: @escaping (Any) -> Void) {
+        if let uid = UserDefaultsKey.uid.get() {
+            print("uid", uid)
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyyMMdd"
+            let id = dateFormatter.string(from: Date())
+            do {
+                try db.collection("user").document(uid).collection("answers").document(id).setData(from: Answer(select: select))
+            } catch {
                 print("Error add answer")
-            } else {
-                print("Success add answer")
             }
         }
     }
+    
+    func getAnswer(completion: @escaping (Any) -> Void) {
+        if let uid = UserDefaultsKey.uid.get() {
+            db.collection("user").document(uid).collection("answers").getDocuments{collection, err in
+                if let err {
+                    print("Error get answers \(err)")
+                    completion(true)
+                } else {
+                    guard let collection else {
+                        print("Error get answers")
+                        return
+                    }
+                    self.manager.answers = []
+                    for document in collection.documents {
+                        if let answer = try? document.data(as: Answer.self) {
+                            self.manager.answers.append(answer)
+                        }
+                    }
+                    self.manager.answers.sort(by: {Int($0.id!)! > Int($1.id!)!})
+                }
+            }
+            
+        }
+    }
+    
+    
     
 }
