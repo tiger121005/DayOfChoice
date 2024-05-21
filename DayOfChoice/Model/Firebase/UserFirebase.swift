@@ -60,26 +60,23 @@ class UserFirebase: ObservableObject {
     }
     
     func getAnswer() async {
-        await serialQueue.async {
-            guard let uid = UserDefaultsKey.uid.get() else {
-                return
-            }
-            do {
-                let datas = try await db.collection("user").document(uid).collection("answers").getDocuments()
-                self.manager.answers = []
-                for document in datas.documents {
-                    if let answer = try? document.data(as: Answer.self) {
-                        self.manager.answers.append(answer)
-                    }
-                }
-                self.manager.answers.sort(by: { Int($0.id!)! > Int($1.id!)! })
-                print("manager1", ObjectIdentifier(self.manager))
-                print("finish getAnswer")
-            } catch {
-                print("Error getting answers: \(error)")
-            }
+        guard let uid = UserDefaultsKey.uid.get() else {
+            return
         }
-        
+        do {
+            let datas = try await db.collection("user").document(uid).collection("answers").getDocuments()
+            self.manager.answers = []
+            for document in datas.documents {
+                if let answer = try? document.data(as: Answer.self) {
+                    self.manager.answers.append(answer)
+                }
+            }
+            self.manager.answers.sort(by: { Int($0.id!)! > Int($1.id!)! })
+            print("manager1", ObjectIdentifier(self.manager))
+            print("finish getAnswer")
+        } catch {
+            print("Error getting answers: \(error)")
+        }
         
     }
     
