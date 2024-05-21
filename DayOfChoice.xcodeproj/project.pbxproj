@@ -25,6 +25,8 @@
 		94A1BD832BF9E70B00C7528D /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1BD822BF9E70B00C7528D /* Utility.swift */; };
 		94A1BD852BFA31C500C7528D /* ResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1BD842BFA31C500C7528D /* ResultViewController.swift */; };
 		94A1BD892BFA4CA800C7528D /* Material.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1BD882BFA4CA800C7528D /* Material.swift */; };
+		94A1BD8B2BFCD65F00C7528D /* LogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1BD8A2BFCD65F00C7528D /* LogViewController.swift */; };
+		94A1BD8D2BFCE08B00C7528D /* NaturalLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1BD8C2BFCE08B00C7528D /* NaturalLabel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +47,8 @@
 		94A1BD822BF9E70B00C7528D /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		94A1BD842BFA31C500C7528D /* ResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultViewController.swift; sourceTree = "<group>"; };
 		94A1BD882BFA4CA800C7528D /* Material.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Material.swift; sourceTree = "<group>"; };
+		94A1BD8A2BFCD65F00C7528D /* LogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogViewController.swift; sourceTree = "<group>"; };
+		94A1BD8C2BFCE08B00C7528D /* NaturalLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaturalLabel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +102,7 @@
 		94A1BD6F2BF4AF9600C7528D /* View */ = {
 			isa = PBXGroup;
 			children = (
+				94A1BD8C2BFCE08B00C7528D /* NaturalLabel.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -107,6 +112,7 @@
 			children = (
 				94A1BD802BF9E21A00C7528D /* QuestionViewController.swift */,
 				94A1BD842BFA31C500C7528D /* ResultViewController.swift */,
+				94A1BD8A2BFCD65F00C7528D /* LogViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -223,7 +229,9 @@
 				94A1BD7A2BF4B75E00C7528D /* Article.swift in Sources */,
 				94A1BD762BF4B56B00C7528D /* QuestionFirebase.swift in Sources */,
 				94A1BD832BF9E70B00C7528D /* Utility.swift in Sources */,
+				94A1BD8B2BFCD65F00C7528D /* LogViewController.swift in Sources */,
 				94A1BD892BFA4CA800C7528D /* Material.swift in Sources */,
+				94A1BD8D2BFCE08B00C7528D /* NaturalLabel.swift in Sources */,
 				94A1BD742BF4B56000C7528D /* UserFirebase.swift in Sources */,
 				94A1BD7C2BF4BB6500C7528D /* Manager.swift in Sources */,
 				94A1BD852BFA31C500C7528D /* ResultViewController.swift in Sources */,

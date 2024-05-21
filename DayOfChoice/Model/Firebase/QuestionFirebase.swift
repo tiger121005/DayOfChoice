@@ -65,12 +65,13 @@ class QuestionFirebase: ObservableObject {
     
     func getPrequestion() async -> Question? {
         await withCheckedContinuation { continuation in
-            print("manager3", ObjectIdentifier(manager))
             print("start get pre question")
-            guard let latest = manager.answers.first else {
+            print("answers", manager.answers.count)
+            if manager.answers.count < 2 {
                 print("There is no data")
                 return
             }
+            let latest = manager.answers[1]
             let date = String(latest.id!.suffix(4))
             
             db.collection("question").document(date).getDocument { (document, err) in
@@ -91,13 +92,14 @@ class QuestionFirebase: ObservableObject {
     
     func getPreResult() async -> Result? {
         await withCheckedContinuation { continuation in
-            guard let latest = manager.answers.first else {
+            if manager.answers.count < 2 {
                 return
             }
+            let latest = manager.answers[1]
             let year = String(latest.id!.prefix(4))
             let date = String(latest.id!.suffix(4))
             
-            db.collection("question").document(date).collection("resuts").document(year).getDocument { (document, err) in
+            db.collection("question").document(date).collection("results").document(year).getDocument { (document, err) in
                 guard let document, document.exists else {
                     print("Error get pre result")
                     continuation.resume(returning: nil)
@@ -105,6 +107,8 @@ class QuestionFirebase: ObservableObject {
                 }
                 do {
                     let result = try document.data(as: Result.self)
+                    print("number1", result.number1)
+                    print("number2", result.number2)
                     continuation.resume(returning: result)
                 } catch {
                     print("Error get pre result")
