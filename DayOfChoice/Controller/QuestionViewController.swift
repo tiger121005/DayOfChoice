@@ -21,7 +21,6 @@ class QuestionViewController: UIViewController {
     
     var selectNum = 0
     var question: Question?
-    var questionID: String = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,8 +53,9 @@ class QuestionViewController: UIViewController {
     }
     
     @IBAction func vote() {
-        utility.vote(questionID: questionID, select: selectNum)
-        
+        Task {
+            await utility.vote(select: selectNum)
+        }
     }
    
 

@@ -19,31 +19,26 @@ class QuestionFirebase: ObservableObject {
     
     
     
-    func addNum(questionID: String, select: Int) {
+    func addNum(select: Int) async {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMMdd"
         let year = String(formatter.string(from: Date()).prefix(4))
         let date = String(formatter.string(from: Date()).suffix(4))
         if select == 1 {
-            db.collection("question").document(date).collection("results").document(year).updateData([
-                "number1": FieldValue.increment(Int64(1))
-            ]) { err in
-                if let err {
-                    print("Error addNum \(err)")
-                } else {
-                    print("Success addNum")
-                }
+            do {
+                try await db.collection("question").document(date).collection("results").document(year).updateData([
+                    "number1": FieldValue.increment(Int64(1))
+                ])
+            } catch {
+                print("Error add num")
             }
         } else {
-            db.collection("question").document(date).collection("results").document(year).updateData([
-                "number2": FieldValue.increment(Int64(1))
-            ]) { err in
-                if let err {
-                    print("Error addNum \(err)")
-                } else {
-                    print("Success addNum")
-                }
-                
+            do {
+                try await db.collection("question").document(date).collection("results").document(year).updateData([
+                    "number2": FieldValue.increment(Int64(1))
+                ])
+            } catch {
+                print("Error add num")
             }
         }
     }
@@ -70,7 +65,10 @@ class QuestionFirebase: ObservableObject {
     
     func getPrequestion() async -> Question? {
         await withCheckedContinuation { continuation in
+            print("manager3", ObjectIdentifier(manager))
+            print("start get pre question")
             guard let latest = manager.answers.first else {
+                print("There is no data")
                 return
             }
             let date = String(latest.id!.suffix(4))

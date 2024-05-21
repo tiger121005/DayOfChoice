@@ -13,8 +13,10 @@ class ResultViewController: UIViewController {
     @IBOutlet var questionLabel: UILabel!
     @IBOutlet var graphView: UIView!
     
+    let userFB = UserFirebase.shared
     let questionFB = QuestionFirebase.shared
     let material = Material.shared
+    let manager = Manager.shared
     let screenWidth = UIScreen.main.bounds.width
     
     var question: Question!
@@ -24,23 +26,29 @@ class ResultViewController: UIViewController {
         super.viewDidLoad()
 
         Task {
-            question = await questionFB.getPrequestion()
-            guard let question else {
-                return
-            }
-            questionLabel.text = question.question
-            
-            result = await questionFB.getPreResult()
-            guard let result else {
-                return
-            }
+            await setupData()
             setupGraph()
         }
     }
     
+    func setupData() async {
+        
+        await userFB.getAnswer()
+        print("manager2", ObjectIdentifier(manager))
+        question = await questionFB.getPrequestion()
+        guard let question else {
+            print("Cannnot read question")
+            return
+        }
+        questionLabel.text = question.question
+        
+        result = await questionFB.getPreResult()
+    }
+    
 
     func setupGraph() {
-        guard let question else {
+        guard let result else {
+            print("Cannot read result")
             return
         }
         

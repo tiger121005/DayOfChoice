@@ -7,6 +7,8 @@
 
 import Foundation
 
+let serialQueue = DispatchQueue(label: "com.example.MyApp.serialQueue")
+
 struct Utility {
     static var shared = Utility()
     
@@ -14,14 +16,9 @@ struct Utility {
     let questionFB = QuestionFirebase.shared
     var manager = Manager.shared
     
-    func setupFirebase() {
-        userFB.getUserInfo(){_ in}
-        userFB.getAnswer(){_ in}
-        
+    func vote(select: Int) async {
+        await userFB.addAnswer(select: select)
+        await questionFB.addNum(select: select)
     }
     
-    func vote(questionID: String, select: Int) {
-        userFB.addAnswer(questionID: questionID, select: select){_ in}
-        questionFB.addNum(questionID: questionID, select: select)
-    }
 }

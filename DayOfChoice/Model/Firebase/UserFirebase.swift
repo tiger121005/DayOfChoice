@@ -21,7 +21,8 @@ class UserFirebase: ObservableObject {
     
     var manager = Manager.shared
     
-    func createUser(id: String) {
+    func createUser(id: String) async {
+        
         do {
             try db.collection("user").document(id).setData(from: User(name: "no name", friends: [], questions: [], minor: 0))
         } catch {
@@ -30,32 +31,23 @@ class UserFirebase: ObservableObject {
         
     }
     
-    func getUserInfo(completion: @escaping (Any) -> Void) {
-        db.collection("user").document(UserDefaultsKey.uid.get() ?? "").getDocument { (document, err) in
-            if let err {
-                print("Error getting user information: \(err)")
-                completion(true)
-            } else {
-                if let document, document.exists {
-                    do {
-                        let user = try document.data(as: User.self)
-                        completion(true)
-                    } catch {
-                        print("Error getting user information: \(String(describing: err))")
-                        completion(true)
-                    }
-                } else {
-                    print("Error getting user information: \(String(describing: err))")
-                    completion(true)
-                }
+    func getUserInfo() async {
+        Task {
+            guard let uid = UserDefaultsKey.uid.get() else {
+                print("Cannot get uid")
+                return
             }
+            manager.user = try await db.collection("user").document(uid).getDocument(as: User.self)
         }
     }
     
     
-    func addAnswer(questionID: String, select: Int, completion: @escaping (Any) -> Void) {
-        if let uid = UserDefaultsKey.uid.get() {
-            print("uid", uid)
+    func addAnswer(select: Int) async {
+        Task {
+            guard let uid = UserDefaultsKey.uid.get() else {
+                print("Cannnot get uid")
+                return
+            }
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyyMMdd"
             let id = dateFormatter.string(from: Date())
@@ -67,30 +59,28 @@ class UserFirebase: ObservableObject {
         }
     }
     
-    func getAnswer(completion: @escaping (Any) -> Void) {
-        if let uid = UserDefaultsKey.uid.get() {
-            db.collection("user").document(uid).collection("answers").getDocuments{collection, err in
-                if let err {
-                    print("Error get answers \(err)")
-                    completion(true)
-                } else {
-                    guard let collection else {
-                        print("Error get answers")
-                        return
-                    }
-                    self.manager.answers = []
-                    for document in collection.documents {
-                        if let answer = try? document.data(as: Answer.self) {
-                            self.manager.answers.append(answer)
-                        }
-                    }
-                    self.manager.answers.sort(by: {Int($0.id!)! > Int($1.id!)!})
-                }
+    func getAnswer() async {
+        await serialQueue.async {
+            guard let uid = UserDefaultsKey.uid.get() else {
+                return
             }
-            
+            do {
+                let datas = try await db.collection("user").document(uid).collection("answers").getDocuments()
+                self.manager.answers = []
+                for document in datas.documents {
+                    if let answer = try? document.data(as: Answer.self) {
+                        self.manager.answers.append(answer)
+                    }
+                }
+                self.manager.answers.sort(by: { Int($0.id!)! > Int($1.id!)! })
+                print("manager1", ObjectIdentifier(self.manager))
+                print("finish getAnswer")
+            } catch {
+                print("Error getting answers: \(error)")
+            }
         }
+        
+        
     }
-    
-    
     
 }

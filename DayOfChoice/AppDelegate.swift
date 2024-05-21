@@ -19,17 +19,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
         
         let userFB = UserFirebase.shared
+        let utility = Utility.shared
         
         Auth.auth().signInAnonymously { authResult, error in
-            guard let user = authResult?.user else { 
+            guard let user = authResult?.user else {
                 print("Error login")
                 return
             }
             let _ = user.isAnonymous
             let uid = user.uid
             if UserDefaultsKey.uid.get() == nil {
-                userFB.createUser(id: uid)
-                UserDefaultsKey.uid.set(value: uid)
+                Task {
+                    await userFB.createUser(id: uid)
+                    UserDefaultsKey.uid.set(value: uid)
+                }
             }
             
         }
