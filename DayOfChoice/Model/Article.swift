@@ -7,6 +7,7 @@
 
 import Foundation
 import FirebaseFirestore
+import SwiftUI
 
 public struct User: Codable {
     var name: String
@@ -21,6 +22,16 @@ public struct Question: Codable {
     let select1: String
     let select2: String
     @DocumentID var id: String?
+}
+
+public struct Logs {
+    let question: String
+    let select1: String
+    let select2: String
+    var number1: Int
+    var number2: Int
+    var select: Int
+    let id: String
 }
 
 public struct Answer: Codable {
@@ -38,6 +49,12 @@ public struct Friends: Codable {
     let name: String
     var matchNum: Int
     let id: String
+}
+
+public struct ChartData {
+    let title: String
+    let number: Int
+    let color: Color
 }
 
 

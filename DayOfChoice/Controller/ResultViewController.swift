@@ -7,10 +7,11 @@
 
 import UIKit
 import SwiftUI
+import RealmSwift
 
 class ResultViewController: UIViewController {
     
-    @IBOutlet var questionLabel: UILabel!
+    @IBOutlet var questionLabel: NaturalLabel!
     @IBOutlet var graphView: UIView!
     
     let userFB = UserFirebase.shared
@@ -19,13 +20,13 @@ class ResultViewController: UIViewController {
     let manager = Manager.shared
     let screenWidth = UIScreen.main.bounds.width
     
-    var question: Question!
-    var result: Result!
-
+    var log: Logs?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
+        self.navigationItem.backButtonTitle = "前回の結果"
+        self.navigationItem.backButtonDisplayMode = .minimal
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -37,22 +38,31 @@ class ResultViewController: UIViewController {
     
     func setupData() async {
         
-        await userFB.getAnswer()
-        print("manager2", ObjectIdentifier(manager))
-        question = await questionFB.getPrequestion()
-        guard let question else {
-            print("Cannnot read question")
+        await questionFB.getPreResult()
+        
+        let realm = try! await Realm()
+        
+        manager.logs = realm.objects(RealmData.self).map{Logs(question: $0.question, select1: $0.select1, select2: $0.select2, number1: $0.number1, number2: $0.number2, select: $0.select, id: $0.id)}.sorted(by: { Int($0.id)! > Int($1.id)! })
+        
+        dump(manager.logs)
+        if manager.logs.count < 2 {
+            print("Cannot read question")
+            
             return
         }
-        questionLabel.text = question.question
+        log = manager.logs[1]
         
-        result = await questionFB.getPreResult()
+        Task { @MainActor in
+            questionLabel.text = manager.logs[1].question
+            questionLabel.naturalize()
+        }
+        
     }
     
 
     func setupGraph() {
-        guard let result else {
-            print("Cannot read result")
+        
+        guard let log else {
             return
         }
         
@@ -61,15 +71,15 @@ class ResultViewController: UIViewController {
         let bar1 = UIView()
         let bar2 = UIView()
         
-        let number1 = Double(result.number1)
-        let number2 = Double(result.number2)
+        let number1 = Double(log.number1)
+        let number2 = Double(log.number2)
         
         let barWidth = CGFloat(50)
         let barX = screenWidth * (3/10)
         let maxHeight = graphHeight -  90
         let topPadding = CGFloat(60)
         
-        if result.number1 > result.number2 {
+        if log.number1 > log.number2 {
             bar1.frame = CGRect(x: barX,
                                 y: topPadding,
                                 width: barWidth,
@@ -123,8 +133,8 @@ class ResultViewController: UIViewController {
         let labelWidth = CGFloat(100)
         let labelY = topPadding + maxHeight + 10
         
-        select1Labal.text = question.select1
-        select2Label.text = question.select2
+        select1Labal.text = log.select1
+        select2Label.text = log.select2
         
         select1Labal.font = .systemFont(ofSize: 20)
         select2Label.font = .systemFont(ofSize: 20)
@@ -181,7 +191,7 @@ class ResultViewController: UIViewController {
         starView.image = UIImage(systemName: "star.fill")
         let starWidth = CGFloat(50)
         
-        if manager.answers[1].select == 1 {
+        if manager.logs[1].select == 1 {
             starView.tintColor = .red
             starView.frame = CGRect(x: bar1.frame.minX, y: rate1Label.frame.minY - 55, width: starWidth, height: starWidth)
         } else {

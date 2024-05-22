@@ -18,7 +18,6 @@ class NaturalLabel: UILabel {
         let tokens = tokenizer.tokens(for: text.startIndex..<text.endIndex)
         let words = tokens.map({ String(text[$0]) })
         
-        print("words", words)
         guard words.count > 1 else { return }
         
         var fixedLines = [String]()

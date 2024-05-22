@@ -13,5 +13,5 @@ class Manager {
     private init() {}
     
     var user: User = User(name: "no name", friends: [], questions: [], minor: 0)
-    var answers: [Answer] = []
+    var logs: [Logs] = []
 }

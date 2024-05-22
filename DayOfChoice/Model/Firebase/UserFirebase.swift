@@ -10,14 +10,14 @@ import Firebase
 import FirebaseCore
 import FirebaseAuth
 import FirebaseFirestore
+import RealmSwift
 
 class UserFirebase: ObservableObject {
     
     static let shared = UserFirebase()
     
     let db = Firestore.firestore()
-    var userRef: DocumentReference!
-    var answersRef: CollectionReference!
+    
     
     var manager = Manager.shared
     
@@ -53,31 +53,40 @@ class UserFirebase: ObservableObject {
             let id = dateFormatter.string(from: Date())
             do {
                 try db.collection("user").document(uid).collection("answers").document(id).setData(from: Answer(select: select))
+                
+                let newAnswer = RealmData()
+                
+                let realm = try! Realm()
+                if let updatedata = realm.object(ofType: RealmData.self, forPrimaryKey: id) {
+                    try! realm.write {
+                        updatedata.select = select
+                    }
+                }
             } catch {
                 print("Error add answer")
             }
         }
     }
     
-    func getAnswer() async {
-        guard let uid = UserDefaultsKey.uid.get() else {
-            return
-        }
-        do {
-            let datas = try await db.collection("user").document(uid).collection("answers").getDocuments()
-            self.manager.answers = []
-            for document in datas.documents {
-                if let answer = try? document.data(as: Answer.self) {
-                    self.manager.answers.append(answer)
-                }
-            }
-            self.manager.answers.sort(by: { Int($0.id!)! > Int($1.id!)! })
-            print("manager1", ObjectIdentifier(self.manager))
-            print("finish getAnswer")
-        } catch {
-            print("Error getting answers: \(error)")
-        }
-        
-    }
+//    func getAnswer() async {
+//        guard let uid = UserDefaultsKey.uid.get() else {
+//            return
+//        }
+//        do {
+//            let datas = try await db.collection("user").document(uid).collection("answers").getDocuments()
+//            self.manager.answers = []
+//            for document in datas.documents {
+//                if let answer = try? document.data(as: Answer.self) {
+//                    self.manager.answers.append(answer)
+//                }
+//            }
+//            self.manager.answers.sort(by: { Int($0.id!)! > Int($1.id!)! })
+//            print("manager1", ObjectIdentifier(self.manager))
+//            print("finish getAnswer")
+//        } catch {
+//            print("Error getting answers: \(error)")
+//        }
+//        
+//    }
     
 }

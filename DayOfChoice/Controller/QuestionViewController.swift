@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseAuth
+import RealmSwift
 
 class QuestionViewController: UIViewController {
     
@@ -25,6 +26,9 @@ class QuestionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        
+        
+        
         Task {
             print("uid", UserDefaultsKey.uid.get())
             
@@ -36,21 +40,24 @@ class QuestionViewController: UIViewController {
                 return
             }
             
-            DispatchQueue.main.async {
-                self.questionLabel.text = question.question
-                self.questionLabel.naturalize()
-                self.select1Btn.titleLabel?.text = question.select1
-                self.select2Btn.titleLabel?.text = question.select2
-            }
+            self.questionLabel.text = question.question
+            self.questionLabel.naturalize()
+            self.select1Btn.setTitle(question.select1, for: .normal)
+            self.select2Btn.setTitle(question.select2, for: .normal)
             
-            self.select1Btn.isEnabled = true
-            self.select2Btn.isEnabled = true
         }
     }
     
     func setupView() {
-        select1Btn.titleLabel?.textAlignment = NSTextAlignment.center
-        select2Btn.titleLabel?.textAlignment = NSTextAlignment.center
+        
+        select1Btn.configuration = nil
+        select2Btn.configuration = nil
+        
+        select1Btn.titleLabel?.font = .systemFont(ofSize: 20, weight: .semibold)
+        select2Btn.titleLabel?.font = .systemFont(ofSize: 20, weight: .semibold)
+        
+        select1Btn.tintColor = .white
+        select2Btn.tintColor = .white
         
         select1Btn.layer.cornerCurve = .continuous
         select2Btn.layer.cornerCurve = .continuous
@@ -82,22 +89,42 @@ class QuestionViewController: UIViewController {
     @IBAction func select1() {
         selectNum = 1
         voteBtn.isEnabled = true
-        select1Btn.layer.shadowColor = UIColor.white.cgColor
-        select2Btn.layer.shadowColor = UIColor.black.cgColor
         voteBtn.layer.shadowColor = UIColor.black.cgColor
+        
+        select1Btn.layer.shadowColor = UIColor.red.cgColor
+        select1Btn.layer.shadowOffset = CGSize(width: 0, height: 0)
+        select1Btn.layer.shadowRadius = CGFloat(15)
+        select1Btn.layer.shadowOpacity = 1
+        
+        select2Btn.layer.shadowColor = UIColor.black.cgColor
+        select2Btn.layer.shadowOffset = CGSize(width: 0, height: 5)
+        select2Btn.layer.shadowRadius = CGFloat(5)
+        select1Btn.layer.shadowOpacity = 0.4
+        
     }
     
     @IBAction func select2() {
         selectNum = 2
         voteBtn.isEnabled = true
-        select1Btn.layer.shadowColor = UIColor.black.cgColor
-        select2Btn.layer.shadowColor = UIColor.white.cgColor
         voteBtn.layer.shadowColor = UIColor.black.cgColor
+        
+        select1Btn.layer.shadowColor = UIColor.black.cgColor
+        select1Btn.layer.shadowOffset = CGSize(width: 0, height: 5)
+        select1Btn.layer.shadowRadius = CGFloat(5)
+        select1Btn.layer.shadowOpacity = 0.4
+        
+        select2Btn.layer.shadowColor = UIColor.blue.cgColor
+        select2Btn.layer.shadowOffset = CGSize(width: 0, height: 0)
+        select2Btn.layer.shadowRadius = CGFloat(15)
+        select2Btn.layer.shadowOpacity = 0.4
+        
+        
     }
     
     @IBAction func vote() {
         Task {
-            await utility.vote(select: selectNum)
+            await userFB.addAnswer(select: selectNum)
+            await questionFB.addNum(select: selectNum)
         }
     }
    

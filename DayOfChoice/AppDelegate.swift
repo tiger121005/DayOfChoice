@@ -11,6 +11,7 @@ import FirebaseCore
 import FirebaseAuth
 import FirebaseFirestore
 import FirebaseFirestoreSwift
+import RealmSwift
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -36,6 +37,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             
         }
+        
+        
+        let config = Realm.Configuration(schemaVersion: 1, migrationBlock: nil, deleteRealmIfMigrationNeeded: true)
+        Realm.Configuration.defaultConfiguration = config
+        
         return true
         
     }
