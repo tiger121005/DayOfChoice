@@ -7,7 +7,6 @@
 
 import UIKit
 import FirebaseAuth
-import RealmSwift
 
 class QuestionViewController: UIViewController {
     
@@ -19,6 +18,7 @@ class QuestionViewController: UIViewController {
     let userFB = UserFirebase.shared
     let questionFB = QuestionFirebase.shared
     let utility = Utility.shared
+    let debug = DebugManager()
     
     var selectNum = 0
     var question: Question?
@@ -30,7 +30,22 @@ class QuestionViewController: UIViewController {
         
         
         Task {
+            
+            do {
+                let authData = try await Auth.auth().signInAnonymously()
+                
+                let user = authData.user
+                let uid = user.uid
+                if UserDefaultsKey.uid.get() != uid {
+                    await userFB.createUser(id: uid)
+                    UserDefaultsKey.uid.set(value: uid)
+                }
+                
+            } catch {
+                print("login error")
+            }
             print("uid", UserDefaultsKey.uid.get())
+            
             
             voteBtn.isEnabled = false
             question = await questionFB.getQuestion()
@@ -125,6 +140,8 @@ class QuestionViewController: UIViewController {
         Task {
             await userFB.addAnswer(select: selectNum)
             await questionFB.addNum(select: selectNum)
+            
+            self.performSegue(withIdentifier: "toResult", sender: nil)
         }
     }
    

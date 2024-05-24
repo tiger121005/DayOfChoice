@@ -104,23 +104,37 @@ class QuestionFirebase: ObservableObject {
 //    }
     
     func getPreResult() async {
-        if manager.logs.count < 2 {
-            return
+        let realm = try! await Realm()
+        
+        
+        await MainActor.run {
+            manager.logs = realm.objects(RealmData.self).map{Logs(question: $0.question, select1: $0.select1, select2: $0.select2, number1: $0.number1, number2: $0.number2, select: $0.select, id: $0.id)}.sorted(by: {Int($0.id)! > Int($1.id)!})
+            if manager.logs.count < 2 {
+                print("Error get pre result")
+                return
+            }
         }
         let latest = manager.logs[1]
         let year = String(latest.id.prefix(4))
         let date = String(latest.id.suffix(4))
         
         do {
+            
             let result = try await db.collection("question").document(date).collection("results").document(year).getDocument(as: Result.self)
             
-            let realm = try! await Realm()
-            if let questionUpdate = realm.object(ofType: RealmData.self, forPrimaryKey: latest.id) {
-                try! realm.write {
-                    questionUpdate.number1 = result.number1
-                    questionUpdate.number2 = result.number2
+            await MainActor.run {
+                if let questionUpdate = realm.object(ofType: RealmData.self, forPrimaryKey: latest.id) {
+                    print(4, Thread.current)
+                    try! realm.write {
+                        questionUpdate.number1 = result.number1
+                        questionUpdate.number2 = result.number2
+                    }
+                    
+                    manager.logs[1].number1 = result.number1
+                    manager.logs[1].number2 = result.number2
                 }
             }
+            
         } catch {
             print("Error get pre result")
         }
@@ -128,7 +142,7 @@ class QuestionFirebase: ObservableObject {
     
     func getResult(id: String) async -> Result? {
         await withCheckedContinuation {continuation in
-            db.collection("question").document(String(id.prefix(4))).collection("results").document(String(id.suffix(4))).getDocument { (document, err) in
+            db.collection("question").document(String(id.suffix(4))).collection("results").document(String(id.prefix(4))).getDocument { (document, err) in
                 guard let document, document.exists else {
                     print("Error get result")
                     continuation.resume(returning: nil)

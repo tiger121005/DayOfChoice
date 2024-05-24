@@ -19,31 +19,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
         
-        let userFB = UserFirebase.shared
-        let utility = Utility.shared
-        
-        Auth.auth().signInAnonymously { authResult, error in
-            guard let user = authResult?.user else {
-                print("Error login")
-                return
-            }
-            let _ = user.isAnonymous
-            let uid = user.uid
-            if UserDefaultsKey.uid.get() == nil {
-                Task {
-                    await userFB.createUser(id: uid)
-                    UserDefaultsKey.uid.set(value: uid)
-                }
-            }
-            
-        }
         
         
         let config = Realm.Configuration(schemaVersion: 1, migrationBlock: nil, deleteRealmIfMigrationNeeded: true)
         Realm.Configuration.defaultConfiguration = config
         
-        return true
         
+        
+        
+        return true
+//        Auth.auth().signInAnonymously { authResult, error in
+//            guard let user = authResult?.user else {
+//                print("Error login")
+//                return
+//            }
+//            let _ = user.isAnonymous
+//            let uid = user.uid
+//            if UserDefaultsKey.uid.get() != uid {
+//                Task {
+//                    await userFB.createUser(id: uid)
+//                    UserDefaultsKey.uid.set(value: uid)
+//                    
+//                }
+//            } else {
+//                UserDefaultsKey.uid.set(value: uid)
+//                
+//            }
+//            
+//            
+//        }
     }
 
     // MARK: UISceneSession Lifecycle

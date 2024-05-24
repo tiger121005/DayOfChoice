@@ -53,7 +53,7 @@ public struct Friends: Codable {
 
 public struct ChartData {
     let title: String
-    let number: Int
+    let number: Double
     let color: Color
 }
 

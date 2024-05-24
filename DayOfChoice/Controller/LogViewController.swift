@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import SwiftUI
+import Charts
 
 class LogViewController: UIViewController {
     
@@ -31,7 +33,7 @@ class LogViewController: UIViewController {
     func setupCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(UINib(nibName: "CustomCell", bundle: nil), forCellWithReuseIdentifier: "CustomCell")
+//        collectionView.register(UINib(nibName: "CustomCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "CustomCell")
         
         Task {
             let formatter = DateFormatter()
@@ -64,16 +66,122 @@ extension LogViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CustomCell", for: indexPath)
         
-        cell.contentConfiguration = CustomCell(
-            title1: manager.logs[indexPath.row + 1].select1,
-            number1: manager.logs[indexPath.row + 1].number1,
-            title2: manager.logs[indexPath.row + 1].select2,
-            number2: manager.logs[indexPath.row + 1].number2) as? any UIContentConfiguration
+        //        cell.contentConfiguration = CustomCell(
+        //            title1: manager.logs[indexPath.row + 1].select1,
+        //            number1: manager.logs[indexPath.row + 1].number1,
+        //            title2: manager.logs[indexPath.row + 1].select2,
+        //            number2: manager.logs[indexPath.row + 1].number2,
+        //            select: manager.logs[indexPath.row + 1].select) as? any UIContentConfiguration
+        let log = manager.logs[indexPath.row + 1]
+        
+        let datas = [ChartData(title: log.select2, number: Double(log.number2), color: .blue),
+                     ChartData(title: log.select1, number: Double(log.number1), color: .red)]
+        
+        cell.contentConfiguration = UIHostingConfiguration {
+            ZStack {
+                
+                RoundedRectangle(cornerSize: CGSize(width: 30, height: 30), style: .continuous)
+                    .foregroundColor(.white)
+                    .shadow(color: .black, radius: 5, x: 0, y: 3)
+                    .frame(height: 270)
+                
+                
+                VStack {
+                    Text(insertWordJoiners(string: log.question))
+                        .font(.footnote)
+                        .padding(.top, 20)
+                        .padding(.horizontal, 20)
+                    
+                    Chart(datas, id: \.title) { data in
+                        SectorMark(angle: .value("number", data.number))
+                            .foregroundStyle(data.color)
+                    }
+                    .padding(.horizontal, 40)
+                    
+                    HStack {
+                        VStack {
+                            Text("\(rate1(number1: log.number1, number2: log.number2)) %")
+                                .foregroundStyle(Color.red)
+                                .font(.title3)
+                            
+                            Text(datas[0].title)
+                                .foregroundStyle(Color.red)
+                                .font(.body)
+                            
+                            
+                            if log.select == 1 {
+                                Image(systemName: "star.fill")
+                                    .foregroundColor(.blue)
+                                    .frame(height: 12)
+                                    .padding(.bottom, 10)
+                            } else {
+                                Rectangle()
+                                    .foregroundColor(.white)
+                                    .frame(width: 12, height: 12)
+                                    .padding(.bottom, 10)
+                            }
+                        }
+                        .padding(.leading, 8)
+                        
+                        Spacer()
+                        
+                        VStack {
+                            
+                            Text("\(rate2(number1: log.number1, number2: log.number2)) %")
+                                .foregroundStyle(Color.blue)
+                                .font(.title3)
+                            Text(datas[1].title)
+                                .foregroundStyle(Color.blue)
+                                .font(.body)
+                            
+                            if log.select == 2 {
+                                Image(systemName: "star.fill")
+                                    .foregroundColor(.blue)
+                                    .frame(height: 12)
+                                    .padding(.bottom, 10)
+                            } else {
+                                Rectangle()
+                                    .foregroundColor(.white)
+                                    .frame(width: 12, height: 12)
+                                    .padding(.bottom, 10)
+                            }
+                            
+                            
+                        }
+                        .padding(.trailing, 8)
+                        
+                    }
+                }
+            }
+            .frame(width: UIScreen.main.bounds.width * 0.4)
+        }
+        
+        
         
         return cell
     }
     
+    func rate1(number1: Int, number2: Int) -> String {
+        let data1 = Double(number1)
+        let data2 = Double(number2)
+        let double = round(data1 / (data1 + data2) * 1000) / 10
+        return String(String(double).prefix(4))
+    }
     
+    func rate2(number1: Int, number2: Int) -> String {
+        let data1 = Double(number1)
+        let data2 = Double(number2)
+        let double = round(data1 / (data1 + data2) * 1000) / 10
+        return String(String(100 - double).prefix(4))
+    }
+    
+    func insertWordJoiners(string: String) -> String {
+        let wordJoiner = "\u{2060}"
+        let characters = string.map { String($0) }
+        let modifiedString = characters.joined(separator: wordJoiner)
+        print(modifiedString)
+        return modifiedString
+    }
 }
 
 extension LogViewController: UICollectionViewDelegate {

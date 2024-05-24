@@ -8,19 +8,21 @@
 import Foundation
 import RealmSwift
 
-func addQuestion22() {
-    let realm = try! Realm()
-    
-    let data = RealmData()
-    data.question = "麺を食べるなら？"
-    data.select1 = "うどん"
-    data.select2 = "ラーメン"
-    data.number1 = 498
-    data.number2 = 523
-    data.select = 2
-    data.id = "20240522"
-    try! realm.write {
-        realm.add(data)
+struct DebugManager {
+    func addData22() {
+        let realm = try! Realm()
+        
+        let data = RealmData()
+        data.question = "麺を食べるなら？"
+        data.select1 = "うどん"
+        data.select2 = "ラーメン"
+        data.number1 = 498
+        data.number2 = 523
+        data.select = 2
+        data.id = "20240522"
+        try! realm.write {
+            realm.add(data)
+        }
     }
 }
 

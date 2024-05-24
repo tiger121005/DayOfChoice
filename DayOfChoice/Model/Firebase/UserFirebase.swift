@@ -55,9 +55,9 @@ class UserFirebase: ObservableObject {
                 try db.collection("user").document(uid).collection("answers").document(id).setData(from: Answer(select: select))
                 
                 let newAnswer = RealmData()
-                
                 let realm = try! Realm()
                 if let updatedata = realm.object(ofType: RealmData.self, forPrimaryKey: id) {
+                    
                     try! realm.write {
                         updatedata.select = select
                     }

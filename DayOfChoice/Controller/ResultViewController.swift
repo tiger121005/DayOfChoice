@@ -40,9 +40,9 @@ class ResultViewController: UIViewController {
         
         await questionFB.getPreResult()
         
-        let realm = try! await Realm()
+//        let realm = try! await Realm()
         
-        manager.logs = realm.objects(RealmData.self).map{Logs(question: $0.question, select1: $0.select1, select2: $0.select2, number1: $0.number1, number2: $0.number2, select: $0.select, id: $0.id)}.sorted(by: { Int($0.id)! > Int($1.id)! })
+//        manager.logs = realm.objects(RealmData.self).map{Logs(question: $0.question, select1: $0.select1, select2: $0.select2, number1: $0.number1, number2: $0.number2, select: $0.select, id: $0.id)}.sorted(by: { Int($0.id)! > Int($1.id)! })
         
         dump(manager.logs)
         if manager.logs.count < 2 {
@@ -79,36 +79,51 @@ class ResultViewController: UIViewController {
         let maxHeight = graphHeight -  90
         let topPadding = CGFloat(60)
         
-        if log.number1 > log.number2 {
-            bar1.frame = CGRect(x: barX,
-                                y: topPadding,
-                                width: barWidth,
-                                height: maxHeight)
-            print("bar1", barX, topPadding, barWidth, maxHeight)
-            bar2.frame = CGRect(x: screenWidth - barX - barWidth,
-                                y: topPadding + (maxHeight - (maxHeight * CGFloat(number2 / number1))),
-                                width: barWidth,
-                                height: maxHeight * CGFloat(number2 / number1))
+        if log.number1 >= log.number2 {
             
-            print("bar2", screenWidth - barX - barWidth,
-                  topPadding + (maxHeight - (maxHeight * CGFloat(number2 / number1))),
-                  barWidth,
-                  maxHeight * CGFloat(number2 / number1))
+            if log.number1 != 0 {
+                bar1.frame = CGRect(x: barX,
+                                    y: topPadding,
+                                    width: barWidth,
+                                    height: maxHeight)
+            } else {
+                bar1.frame = CGRect(x: barX, y: topPadding + maxHeight, width: barWidth, height: 0)
+            }
+            
+            
+            
+            if log.number2 != 0 {
+                
+                bar2.frame = CGRect(x: screenWidth - barX - barWidth,
+                                    y: topPadding + (maxHeight - (maxHeight * CGFloat(number2 / number1))),
+                                    width: barWidth,
+                                    height: maxHeight * CGFloat(number2 / number1))
+            } else {
+                bar2.frame = CGRect(x: screenWidth - barX - barWidth,
+                                    y: topPadding + maxHeight,
+                                    width: barWidth, height: 0)
+            }
+            
+            
+            
+            
+            
         } else {
-            bar1.frame = CGRect(x: barX,
-                                y: topPadding + (maxHeight - (maxHeight * CGFloat(number1 / number2))),
-                                width: barWidth,
-                                height: maxHeight * CGFloat((number1 / number2)))
-            print("bar1", barX,
-                  topPadding + (maxHeight - (maxHeight * CGFloat(number2 / number1))),
-                  barWidth,
-                  maxHeight * CGFloat(number1 / number2))
             
             bar2.frame = CGRect(x: screenWidth - barX - barWidth,
                                 y: topPadding,
                                 width: barWidth,
                                 height: maxHeight)
-            print("bar2", screenWidth - barX - barWidth, topPadding, barWidth, maxHeight)
+            
+            if log.number1 != 0 {
+                bar1.frame = CGRect(x: barX,
+                                    y: topPadding + (maxHeight - (maxHeight * CGFloat(number1 / number2))),
+                                    width: barWidth,
+                                    height: maxHeight * CGFloat((number1 / number2)))
+            } else {
+                bar1.frame = CGRect(x: barX, y: topPadding + maxHeight, width: barWidth, height: 0)
+            }
+            
         }
         
         let bar1Layer = CAGradientLayer()
@@ -124,7 +139,6 @@ class ResultViewController: UIViewController {
         
         graphView.addSubview(bar1)
         graphView.addSubview(bar2)
-        
         
         let select1Labal = UILabel()
         let select2Label = UILabel()
@@ -152,11 +166,23 @@ class ResultViewController: UIViewController {
         graphView.addSubview(select2Label)
         
         
+        let baseLine = UIView()
+        baseLine.backgroundColor = .black
+        baseLine.frame = CGRect(x: 20, y: bar1.frame.maxY, width: screenWidth - 40, height: 2)
+        
+        graphView.addSubview(baseLine)
+        
+        
+        
         let rate1Label = UILabel()
         let rate2Label = UILabel()
         
         let rateHeight = CGFloat(25)
         let rateWidth = CGFloat(100)
+        
+        if number1 + number2 == 0 {
+            return
+        }
         
         let rate1 = round(number1 / (number1 + number2) * 1000) / 10
         
@@ -179,13 +205,6 @@ class ResultViewController: UIViewController {
         graphView.addSubview(rate1Label)
         graphView.addSubview(rate2Label)
         
-        let baseLine = UIView()
-        baseLine.backgroundColor = .black
-        baseLine.frame = CGRect(x: 20, y: bar1.frame.maxY, width: screenWidth - 40, height: 2)
-        
-        graphView.addSubview(baseLine)
-        
-        
         let starView = UIImageView()
         
         starView.image = UIImage(systemName: "star.fill")
@@ -200,6 +219,7 @@ class ResultViewController: UIViewController {
         }
         
         graphView.addSubview(starView)
+
     }
    
 
