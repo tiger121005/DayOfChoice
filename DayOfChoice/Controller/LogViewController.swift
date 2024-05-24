@@ -11,22 +11,49 @@ import Charts
 
 class LogViewController: UIViewController {
     
+    @IBOutlet var logView: UIView!
+    @IBOutlet var redBorder: UIView!
+    @IBOutlet var blueBorder: UIView!
     @IBOutlet var voteNumLabel: UILabel!
     @IBOutlet var minorRateLabel: UILabel!
     @IBOutlet var collectionView: UICollectionView!
     
     let manager = Manager.shared
     let questionFB = QuestionFirebase.shared
+    let material = Material.shared
     
-    var results: [Result] = []
+//    var results: [Result] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        setupLogView()
+        setupCollectionView()
+    }
+    
+    func setupLogView() {
+        logView.layer.cornerCurve = .continuous
+        logView.layer.cornerRadius = 20
+        logView.layer.shadowColor = UIColor.black.cgColor
+        logView.layer.shadowOffset = CGSize(width: 0, height: 5)
+        logView.layer.shadowRadius = CGFloat(5)
+        logView.layer.shadowOpacity = 0.7
         voteNumLabel.text = "\(manager.logs.count) 回"
         minorRateLabel.text = "\(round(Double(manager.user.minor) / Double(manager.logs.count) * 1000) / 10) ％"
         
-        setupCollectionView()
+        let red = CAGradientLayer()
+        red.frame = CGRect(x: 0, y: 0, width: redBorder.frame.width, height: redBorder.frame.height)
+        red.colors = material.redGradient
+        red.startPoint = CGPoint(x: 0, y: 0.5)
+        red.endPoint = CGPoint(x: 1, y: 0.5)
+        redBorder.layer.insertSublayer(red, at:0)
+        
+        let blue = CAGradientLayer()
+        blue.frame = CGRect(x: 0, y: 0, width: blueBorder.frame.width, height: blueBorder.frame.height)
+        blue.colors = material.blueGradient
+        blue.startPoint = CGPoint(x: 1, y: 0.5)
+        blue.endPoint = CGPoint(x: 0, y: 0.5)
+        blueBorder.layer.insertSublayer(blue, at:0)
         
     }
     
@@ -46,10 +73,10 @@ class LogViewController: UIViewController {
                     continue
                 }
                 
-                guard let result = await self.questionFB.getResult(id: log.id) else {
-                    continue
-                }
-                self.results.append(result)
+//                guard let result = await self.questionFB.getResult(id: log.id) else {
+//                    continue
+//                }
+//                self.results.append(result)
             }
             
             collectionView.reloadData()
@@ -60,7 +87,7 @@ class LogViewController: UIViewController {
 
 extension LogViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        results.count
+        manager.logs.count - 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -83,7 +110,7 @@ extension LogViewController: UICollectionViewDataSource {
                 RoundedRectangle(cornerSize: CGSize(width: 30, height: 30), style: .continuous)
                     .foregroundColor(.white)
                     .shadow(color: .black, radius: 5, x: 0, y: 3)
-                    .frame(height: 270)
+                    .frame(height: 278)
                 
                 
                 VStack {
@@ -113,7 +140,7 @@ extension LogViewController: UICollectionViewDataSource {
                                 Image(systemName: "star.fill")
                                     .foregroundColor(.blue)
                                     .frame(height: 12)
-                                    .padding(.bottom, 10)
+                                    .padding(.bottom, 15)
                             } else {
                                 Rectangle()
                                     .foregroundColor(.white)
@@ -138,7 +165,7 @@ extension LogViewController: UICollectionViewDataSource {
                                 Image(systemName: "star.fill")
                                     .foregroundColor(.blue)
                                     .frame(height: 12)
-                                    .padding(.bottom, 10)
+                                    .padding(.bottom, 15)
                             } else {
                                 Rectangle()
                                     .foregroundColor(.white)

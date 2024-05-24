@@ -27,7 +27,7 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="問題を読み込み中" textAlignment="center" lineBreakMode="middleTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fi8-GB-SZt" customClass="NaturalLabel" customModule="DayOfChoice" customModuleProvider="target">
                                 <rect key="frame" x="80" y="225" width="233" height="123"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="21"/>
                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -123,13 +123,6 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="まだ質問がありません" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6lz-CM-W8G" customClass="NaturalLabel" customModule="DayOfChoice" customModuleProvider="target">
-                                <rect key="frame" x="67" y="199" width="259" height="91"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
-                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Q6-c2-t2j">
                                 <rect key="frame" x="84" y="708" width="224" height="73"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -142,6 +135,13 @@
                                     <segue destination="RUP-Te-vTW" kind="show" id="uEV-jn-vHq"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="まだ質問がありません" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6lz-CM-W8G" customClass="NaturalLabel" customModule="DayOfChoice" customModuleProvider="target">
+                                <rect key="frame" x="67" y="177" width="259" height="91"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="21"/>
+                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6TK-CS-w8Z"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -150,6 +150,7 @@
                     <connections>
                         <outlet property="graphView" destination="2vb-2M-0dR" id="ajm-F7-ZWc"/>
                         <outlet property="questionLabel" destination="6lz-CM-W8G" id="TZP-Ba-hyE"/>
+                        <outlet property="showLogBtn" destination="5Q6-c2-t2j" id="HFN-C2-a1l"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EwO-Xb-sTz" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -236,8 +237,11 @@
                     </view>
                     <navigationItem key="navigationItem" id="1Ww-TG-KJt"/>
                     <connections>
+                        <outlet property="blueBorder" destination="IYV-Xr-SC4" id="Icx-u4-KPy"/>
                         <outlet property="collectionView" destination="9ee-mv-bF9" id="nd6-pX-LxQ"/>
+                        <outlet property="logView" destination="I0L-ae-FuJ" id="nkG-tm-kjx"/>
                         <outlet property="minorRateLabel" destination="BdB-Ih-IGp" id="R0F-jb-WWo"/>
+                        <outlet property="redBorder" destination="BJU-Dm-iMj" id="bkl-dr-jFk"/>
                         <outlet property="voteNumLabel" destination="4gi-Og-01r" id="XFd-Hu-oe0"/>
                     </connections>
                 </viewController>

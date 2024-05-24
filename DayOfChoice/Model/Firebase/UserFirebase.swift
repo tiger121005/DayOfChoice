@@ -89,4 +89,19 @@ class UserFirebase: ObservableObject {
 //        
 //    }
     
+    
+    func addMinor() async {
+        guard let uid  = UserDefaultsKey.uid.get() else {
+            print("Error get uid")
+            return
+        }
+        do {
+            try await db.collection("user").document(uid).updateData([
+                "minor": FieldValue.increment(Int64(1))
+            ])
+        } catch {
+            print("Error add minor")
+        }
+    }
+    
 }

@@ -13,6 +13,7 @@ class ResultViewController: UIViewController {
     
     @IBOutlet var questionLabel: NaturalLabel!
     @IBOutlet var graphView: UIView!
+    @IBOutlet var showLogBtn: UIButton!
     
     let userFB = UserFirebase.shared
     let questionFB = QuestionFirebase.shared
@@ -25,8 +26,7 @@ class ResultViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.navigationItem.backButtonTitle = "前回の結果"
-        self.navigationItem.backButtonDisplayMode = .minimal
+        setupView()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -36,9 +36,27 @@ class ResultViewController: UIViewController {
         }
     }
     
+    func setupView() {
+        showLogBtn.layer.cornerRadius = showLogBtn.frame.height / 2
+        showLogBtn.layer.cornerCurve = .continuous
+        
+        showLogBtn.layer.borderColor = UIColor.black.cgColor
+        showLogBtn.layer.borderWidth = 3
+        
+        self.navigationItem.backButtonTitle = "前回の結果"
+        self.navigationItem.backButtonDisplayMode = .minimal
+    }
+    
     func setupData() async {
         
-        await questionFB.getPreResult()
+        if manager.first {
+            await questionFB.getPreResult()
+        } else {
+            let realm = try! await Realm()
+            manager.logs = realm.objects(RealmData.self).map{Logs(question: $0.question, select1: $0.select1, select2: $0.select2, number1: $0.number1, number2: $0.number2, select: $0.select, id: $0.id)}.sorted(by: { Int($0.id)! > Int($1.id)! })
+        }
+        
+        
         
 //        let realm = try! await Realm()
         

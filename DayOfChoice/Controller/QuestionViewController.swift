@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseAuth
+import RealmSwift
 
 class QuestionViewController: UIViewController {
     
@@ -19,47 +20,32 @@ class QuestionViewController: UIViewController {
     let questionFB = QuestionFirebase.shared
     let utility = Utility.shared
     let debug = DebugManager()
+    let manager = Manager.shared
     
     var selectNum = 0
     var question: Question?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
-        
-        
         
         Task {
             
-            do {
-                let authData = try await Auth.auth().signInAnonymously()
-                
-                let user = authData.user
-                let uid = user.uid
-                if UserDefaultsKey.uid.get() != uid {
-                    await userFB.createUser(id: uid)
-                    UserDefaultsKey.uid.set(value: uid)
-                }
-                
-            } catch {
-                print("login error")
-            }
-            print("uid", UserDefaultsKey.uid.get())
+            checkFirst()
+            await setupData()
+            setupView()
             
-            
-            voteBtn.isEnabled = false
-            question = await questionFB.getQuestion()
-            guard let question else {
-                select1Btn.isEnabled = false
-                select2Btn.isEnabled = false
-                return
-            }
-            
-            self.questionLabel.text = question.question
-            self.questionLabel.naturalize()
-            self.select1Btn.setTitle(question.select1, for: .normal)
-            self.select2Btn.setTitle(question.select2, for: .normal)
-            
+        }
+        
+    }
+    
+    func checkFirst() {
+        let realm = try! Realm()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMdd"
+        let id = formatter.string(from: Date())
+        if realm.object(ofType: RealmData.self, forPrimaryKey: id) != nil {
+            manager.first = false
+            performSegue(withIdentifier: "toResult", sender: nil)
         }
     }
     
@@ -99,6 +85,42 @@ class QuestionViewController: UIViewController {
         voteBtn.layer.shadowOpacity = 0.4
         voteBtn.layer.shadowOffset = CGSize(width: 0, height: 5)
         voteBtn.layer.shadowRadius = CGFloat(5)
+    }
+    
+    func setupData() async {
+        Task {
+            
+            do {
+                let authData = try await Auth.auth().signInAnonymously()
+                
+                let user = authData.user
+                let uid = user.uid
+                if UserDefaultsKey.uid.get() != uid {
+                    await userFB.createUser(id: uid)
+                    UserDefaultsKey.uid.set(value: uid)
+                }
+                
+            } catch {
+                print("login error")
+            }
+            print("uid", UserDefaultsKey.uid.get())
+            
+            
+            voteBtn.isEnabled = false
+            question = await questionFB.getQuestion()
+            guard let question else {
+                select1Btn.isEnabled = false
+                select2Btn.isEnabled = false
+                return
+            }
+            
+            
+            self.questionLabel.text = question.question
+            self.questionLabel.naturalize()
+            self.select1Btn.setTitle(question.select1, for: .normal)
+            self.select2Btn.setTitle(question.select2, for: .normal)
+            
+        }
     }
     
     @IBAction func select1() {
