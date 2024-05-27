@@ -111,6 +111,7 @@ class QuestionViewController: UIViewController {
             guard let question else {
                 select1Btn.isEnabled = false
                 select2Btn.isEnabled = false
+                questionLabel.text = "読み込み失敗"
                 return
             }
             

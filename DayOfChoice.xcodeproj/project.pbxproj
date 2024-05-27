@@ -12,6 +12,7 @@
 		941EDD2F2BFE17F600CA3549 /* RealmSwift in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 941EDD2D2BFE17ED00CA3549 /* RealmSwift */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		941EDD322BFE1D9B00CA3549 /* Realm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941EDD312BFE1D9B00CA3549 /* Realm.swift */; };
 		941EDD342BFE516F00CA3549 /* DebugManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941EDD332BFE516E00CA3549 /* DebugManager.swift */; };
+		941EDD362C043CC000CA3549 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941EDD352C043CC000CA3549 /* Notification.swift */; };
 		94A1BD552BF4ACED00C7528D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1BD542BF4ACED00C7528D /* AppDelegate.swift */; };
 		94A1BD572BF4ACED00C7528D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1BD562BF4ACED00C7528D /* SceneDelegate.swift */; };
 		94A1BD5C2BF4ACED00C7528D /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 94A1BD5B2BF4ACED00C7528D /* Base */; };
@@ -52,6 +53,7 @@
 		941EDD2A2BFDD3B500CA3549 /* CustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCell.swift; sourceTree = "<group>"; };
 		941EDD312BFE1D9B00CA3549 /* Realm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Realm.swift; sourceTree = "<group>"; };
 		941EDD332BFE516E00CA3549 /* DebugManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugManager.swift; sourceTree = "<group>"; };
+		941EDD352C043CC000CA3549 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		94A1BD512BF4ACED00C7528D /* DayOfChoice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DayOfChoice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94A1BD542BF4ACED00C7528D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		94A1BD562BF4ACED00C7528D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 				94A1BD822BF9E70B00C7528D /* Utility.swift */,
 				94A1BD7B2BF4BB6500C7528D /* Manager.swift */,
 				94A1BD882BFA4CA800C7528D /* Material.swift */,
+				941EDD352C043CC000CA3549 /* Notification.swift */,
 				941EDD332BFE516E00CA3549 /* DebugManager.swift */,
 			);
 			path = Model;
@@ -271,6 +274,7 @@
 				94A1BD572BF4ACED00C7528D /* SceneDelegate.swift in Sources */,
 				94A1BD812BF9E21A00C7528D /* QuestionViewController.swift in Sources */,
 				941EDD342BFE516F00CA3549 /* DebugManager.swift in Sources */,
+				941EDD362C043CC000CA3549 /* Notification.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
