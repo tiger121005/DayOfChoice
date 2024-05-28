@@ -10,6 +10,7 @@ import SwiftUI
 import RealmSwift
 import Firebase
 import FirebaseFirestore
+import AppIntents
 
 //Widgetの更新タイミングを提供
 struct Provider: TimelineProvider {
@@ -27,7 +28,7 @@ struct Provider: TimelineProvider {
 
     //データを取得後に表示するデータ
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-        var entries: [WidgetData] = []
+        
         let currentDate = Date()
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMMdd"
@@ -43,14 +44,14 @@ struct Provider: TimelineProvider {
         
         if let realmData = realm.object(ofType: RealmData.self, forPrimaryKey: formatter.string(from: currentDate)) {
             if realmData.select != 0 {
-                entries = [WidgetData(date: currentDate,
+                let entries = [WidgetData(date: currentDate,
                                       question: "次の質問を待ってね",
                                       select1: "",
                                       select2: "")]
                 completion(Timeline(entries: entries, policy: .atEnd))
                 return
             }
-            entries = [WidgetData(date: currentDate,
+            let entries = [WidgetData(date: currentDate,
                                   question: realmData.question,
                                   select1: realmData.select1,
                                   select2: realmData.select2)]
@@ -128,6 +129,8 @@ struct SmallWidget: View {
 struct MediumWidget: View {
     var entry: Provider.Entry
     
+    @State private var select = 0
+    
     var body: some View {
         VStack {
             HStack {
@@ -135,12 +138,10 @@ struct MediumWidget: View {
                     .frame(minWidth: 120)
                 
                 VStack {
-                    Button(action: {
-                        
-                    }, label: {
+                    Button(intent: Select1Intent()) {
                         Text(entry.select1)
                             .frame(width: 100)
-                    })
+                    }
                     .tint(.white)
                     .background(
                         RoundedRectangle(
@@ -149,12 +150,10 @@ struct MediumWidget: View {
                         .fill(.red)
                     )
                     
-                    Button(action: {
-                        
-                    }, label: {
+                    Button(intent: Select2Intent()) {
                         Text(entry.select2)
                             .frame(width: 100)
-                    })
+                    }
                     .tint(.white)
                     .background(
                         RoundedRectangle(
@@ -164,18 +163,17 @@ struct MediumWidget: View {
                     )
                 }
             }
-            Button(action: {
-                
-            }, label: {
+            
+            Button(intent: VoteIntent()) {
                 Text("投票")
                     .frame(width: 120)
-                    
-            })
+            }
             .tint(Color(uiColor: .systemBackground))
             .background(RoundedRectangle(
                 cornerRadius: .infinity,
                 style: .continuous)
                 .fill(Color(uiColor: .label)))
+            
         }
     }
 }
@@ -202,6 +200,116 @@ struct DayOfChoiceWidget: Widget {
     }
     
     
+}
+
+
+final class Vote {
+    private static var select = 0
+    
+    static func select1() {
+        select = 1
+    }
+    
+    static func select2() {
+        select = 2
+    }
+    
+    static func vote() {
+        Task {
+            print("select", select)
+            FirebaseApp.configure()
+            let db = Firestore.firestore()
+            
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyyMMdd"
+            let year = String(formatter.string(from: Date()).prefix(4))
+            let date = String(formatter.string(from: Date()).suffix(4))
+            if select == 1 {
+                do {
+                    try await db.collection("question").document(date).collection("results").document(year).updateData([
+                        "number1": FieldValue.increment(Int64(1))
+                    ])
+                    print("Success vote from widget")
+                } catch {
+                    print("Error add num")
+                }
+            } else {
+                do {
+                    try await db.collection("question").document(date).collection("results").document(year).updateData([
+                        "number2": FieldValue.increment(Int64(1))
+                    ])
+                    print("Success vote from widget")
+                } catch {
+                    print("Error add num")
+                }
+            }
+            
+            guard let uid = UserDefaultsKey.uid.get() else {
+                print("Cannnot get uid")
+                return
+            }
+            
+            let id = formatter.string(from: Date())
+            do {
+                try db.collection("user").document(uid).collection("answers").document(id).setData(from: Answer(select: select))
+                
+                let newAnswer = RealmData()
+                var realm: Realm {
+                    var config = Realm.Configuration()
+                    let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.Ito.taiga.DayOfChoice")
+                    config.fileURL = url?.appendingPathComponent("db.realm")
+                    let realm = try! Realm(configuration: config)
+                    return realm
+                }
+                if let updatedata = realm.object(ofType: RealmData.self, forPrimaryKey: id) {
+                    
+                    try! realm.write {
+                        updatedata.select = select
+                    }
+                }
+            } catch {
+                print("Error add answer")
+            }
+        }
+    }
+}
+
+
+struct Select1Intent: AppIntent {
+    static var title: LocalizedStringResource = "select1"
+    @Parameter(title: "id")
+    var id: String
+    
+    func perform() async throws -> some IntentResult {
+        print("Tap select1 button")
+        Vote.select1()
+        return .result()
+    }
+}
+
+struct Select2Intent: AppIntent {
+    static var title: LocalizedStringResource = "select2"
+    @Parameter(title: "id")
+    var id: String
+    
+    func perform() async throws -> some IntentResult {
+        print("Tap select2 button")
+        Vote.select2()
+        return .result()
+    }
+}
+
+struct VoteIntent: AppIntent {
+    static var title: LocalizedStringResource = "Vote"
+    @Parameter(title: "id")
+    var id: String
+    
+    func perform() async throws -> some IntentResult {
+        print("Tap vote button")
+        Vote.vote()
+        
+        return .result()
+    }
 }
 
 #Preview(as: .systemSmall) {

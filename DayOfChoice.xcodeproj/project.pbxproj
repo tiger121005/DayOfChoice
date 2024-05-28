@@ -19,7 +19,6 @@
 		941EDD772C045EEE00CA3549 /* DayOfChoiceWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941EDD762C045EEE00CA3549 /* DayOfChoiceWidget.swift */; };
 		941EDD792C045EEF00CA3549 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 941EDD782C045EEF00CA3549 /* Assets.xcassets */; };
 		941EDD7E2C045EEF00CA3549 /* DayOfChoiceWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 941EDD6E2C045EEE00CA3549 /* DayOfChoiceWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		941EDD832C047A9700CA3549 /* Firebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941EDD822C047A9700CA3549 /* Firebase.swift */; };
 		941EDD872C05B35600CA3549 /* UserFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1BD732BF4B56000C7528D /* UserFirebase.swift */; };
 		941EDD882C05B35600CA3549 /* Material.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1BD882BFA4CA800C7528D /* Material.swift */; };
 		941EDD892C05B35600CA3549 /* ResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1BD842BFA31C500C7528D /* ResultViewController.swift */; };
@@ -123,7 +122,6 @@
 		941EDD762C045EEE00CA3549 /* DayOfChoiceWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayOfChoiceWidget.swift; sourceTree = "<group>"; };
 		941EDD782C045EEF00CA3549 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		941EDD7A2C045EEF00CA3549 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		941EDD822C047A9700CA3549 /* Firebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Firebase.swift; sourceTree = "<group>"; };
 		941EDD842C05B1E500CA3549 /* DayOfChoiceWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DayOfChoiceWidgetExtension.entitlements; sourceTree = "<group>"; };
 		941EDD852C05B23700CA3549 /* DayOfChoice.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DayOfChoice.entitlements; sourceTree = "<group>"; };
 		94A1BD512BF4ACED00C7528D /* DayOfChoice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DayOfChoice.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -181,7 +179,6 @@
 				941EDD722C045EEE00CA3549 /* DayOfChoiceWidgetBundle.swift */,
 				941EDD742C045EEE00CA3549 /* DayOfChoiceWidgetLiveActivity.swift */,
 				941EDD762C045EEE00CA3549 /* DayOfChoiceWidget.swift */,
-				941EDD822C047A9700CA3549 /* Firebase.swift */,
 				941EDD782C045EEF00CA3549 /* Assets.xcassets */,
 				941EDD7A2C045EEF00CA3549 /* Info.plist */,
 			);
@@ -431,7 +428,6 @@
 				94A1BD8B2BFCD65F00C7528D /* LogViewController.swift in Sources */,
 				94A1BD892BFA4CA800C7528D /* Material.swift in Sources */,
 				941EDD322BFE1D9B00CA3549 /* Realm.swift in Sources */,
-				941EDD832C047A9700CA3549 /* Firebase.swift in Sources */,
 				94A1BD8D2BFCE08B00C7528D /* NaturalLabel.swift in Sources */,
 				94A1BD742BF4B56000C7528D /* UserFirebase.swift in Sources */,
 				941EDD2B2BFDD3B500CA3549 /* CustomCell.swift in Sources */,
