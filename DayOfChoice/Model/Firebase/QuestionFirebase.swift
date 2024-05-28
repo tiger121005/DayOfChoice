@@ -62,7 +62,13 @@ class QuestionFirebase: ObservableObject {
                     newQuestion.select2 = question.select2
                     newQuestion.id = dateFormatter.string(from: Date())
                     
-                    let realm = try! Realm()
+                    var realm: Realm {
+                        var config = Realm.Configuration()
+                        let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.Ito.taiga.DayOfChoice")
+                        config.fileURL = url?.appendingPathComponent("db.realm")
+                        let realm = try! Realm(configuration: config)
+                        return realm
+                    }
                     if realm.object(ofType: RealmData.self, forPrimaryKey: dateFormatter.string(from: Date())) == nil {
                         try! realm.write {
                             realm.add(newQuestion)
@@ -105,7 +111,13 @@ class QuestionFirebase: ObservableObject {
 //    }
     
     func getPreResult() async {
-        let realm = try! await Realm()
+        var realm: Realm {
+            var config = Realm.Configuration()
+            let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.Ito.taiga.DayOfChoice")
+            config.fileURL = url?.appendingPathComponent("db.realm")
+            let realm = try! Realm(configuration: config)
+            return realm
+        }
         
         
         await MainActor.run {

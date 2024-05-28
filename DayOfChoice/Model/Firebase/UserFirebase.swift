@@ -55,7 +55,13 @@ class UserFirebase: ObservableObject {
                 try db.collection("user").document(uid).collection("answers").document(id).setData(from: Answer(select: select))
                 
                 let newAnswer = RealmData()
-                let realm = try! Realm()
+                var realm: Realm {
+                    var config = Realm.Configuration()
+                    let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.Ito.taiga.DayOfChoice")
+                    config.fileURL = url?.appendingPathComponent("db.realm")
+                    let realm = try! Realm(configuration: config)
+                    return realm
+                }
                 if let updatedata = realm.object(ofType: RealmData.self, forPrimaryKey: id) {
                     
                     try! realm.write {

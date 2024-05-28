@@ -39,7 +39,14 @@ class QuestionViewController: UIViewController {
     }
     
     func checkFirst() {
-        let realm = try! Realm()
+        
+        var realm: Realm {
+            var config = Realm.Configuration()
+            let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.Ito.taiga.DayOfChoice")
+            config.fileURL = url?.appendingPathComponent("db.realm")
+            let realm = try! Realm(configuration: config)
+            return realm
+        }
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMMdd"
         let id = formatter.string(from: Date())
