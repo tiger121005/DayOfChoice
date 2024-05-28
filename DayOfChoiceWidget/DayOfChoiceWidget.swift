@@ -277,8 +277,6 @@ final class Vote {
 
 struct Select1Intent: AppIntent {
     static var title: LocalizedStringResource = "select1"
-    @Parameter(title: "id")
-    var id: String
     
     func perform() async throws -> some IntentResult {
         print("Tap select1 button")
@@ -289,8 +287,6 @@ struct Select1Intent: AppIntent {
 
 struct Select2Intent: AppIntent {
     static var title: LocalizedStringResource = "select2"
-    @Parameter(title: "id")
-    var id: String
     
     func perform() async throws -> some IntentResult {
         print("Tap select2 button")
@@ -301,8 +297,6 @@ struct Select2Intent: AppIntent {
 
 struct VoteIntent: AppIntent {
     static var title: LocalizedStringResource = "Vote"
-    @Parameter(title: "id")
-    var id: String
     
     func perform() async throws -> some IntentResult {
         print("Tap vote button")
