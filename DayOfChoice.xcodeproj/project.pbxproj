@@ -24,8 +24,6 @@
 		941EDD892C05B35600CA3549 /* ResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1BD842BFA31C500C7528D /* ResultViewController.swift */; };
 		941EDD8A2C05B35600CA3549 /* DebugManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941EDD332BFE516E00CA3549 /* DebugManager.swift */; };
 		941EDD8B2C05B35600CA3549 /* Article.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1BD792BF4B75E00C7528D /* Article.swift */; };
-		941EDD8C2C05B35600CA3549 /* QuestionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1BD802BF9E21A00C7528D /* QuestionViewController.swift */; };
-		941EDD8D2C05B35600CA3549 /* CustomQuestionFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1BD772BF4B57600C7528D /* CustomQuestionFirebase.swift */; };
 		941EDD8E2C05B35600CA3549 /* Realm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941EDD312BFE1D9B00CA3549 /* Realm.swift */; };
 		941EDD8F2C05B35600CA3549 /* QuestionFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1BD752BF4B56B00C7528D /* QuestionFirebase.swift */; };
 		941EDD902C05B35600CA3549 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1BD822BF9E70B00C7528D /* Utility.swift */; };
@@ -41,6 +39,9 @@
 		941EDDA02C05C42500CA3549 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 941EDD3C2C045C1F00CA3549 /* WidgetKit.framework */; };
 		941EDDA12C05C43900CA3549 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 941EDD3C2C045C1F00CA3549 /* WidgetKit.framework */; };
 		941EDDA32C05C88500CA3549 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 94A1BD682BF4AE5400C7528D /* GoogleService-Info.plist */; };
+		941EDDA92C0C4F1100CA3549 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941EDDA82C0C4F1100CA3549 /* HomeViewController.swift */; };
+		941EDDAB2C0C4F1F00CA3549 /* AddFriendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941EDDAA2C0C4F1F00CA3549 /* AddFriendViewController.swift */; };
+		941EDDAD2C0C50B600CA3549 /* FriendFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941EDDAC2C0C50B600CA3549 /* FriendFirebase.swift */; };
 		94A1BD552BF4ACED00C7528D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1BD542BF4ACED00C7528D /* AppDelegate.swift */; };
 		94A1BD572BF4ACED00C7528D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1BD562BF4ACED00C7528D /* SceneDelegate.swift */; };
 		94A1BD5C2BF4ACED00C7528D /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 94A1BD5B2BF4ACED00C7528D /* Base */; };
@@ -51,7 +52,6 @@
 		94A1BD6E2BF4AEC600C7528D /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 94A1BD6D2BF4AEC600C7528D /* FirebaseFirestoreSwift */; };
 		94A1BD742BF4B56000C7528D /* UserFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1BD732BF4B56000C7528D /* UserFirebase.swift */; };
 		94A1BD762BF4B56B00C7528D /* QuestionFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1BD752BF4B56B00C7528D /* QuestionFirebase.swift */; };
-		94A1BD782BF4B57600C7528D /* CustomQuestionFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1BD772BF4B57600C7528D /* CustomQuestionFirebase.swift */; };
 		94A1BD7A2BF4B75E00C7528D /* Article.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1BD792BF4B75E00C7528D /* Article.swift */; };
 		94A1BD7C2BF4BB6500C7528D /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1BD7B2BF4BB6500C7528D /* Manager.swift */; };
 		94A1BD7F2BF9A8E700C7528D /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 94A1BD7E2BF9A8E700C7528D /* FirebaseAuth */; };
@@ -124,6 +124,9 @@
 		941EDD7A2C045EEF00CA3549 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		941EDD842C05B1E500CA3549 /* DayOfChoiceWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DayOfChoiceWidgetExtension.entitlements; sourceTree = "<group>"; };
 		941EDD852C05B23700CA3549 /* DayOfChoice.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DayOfChoice.entitlements; sourceTree = "<group>"; };
+		941EDDA82C0C4F1100CA3549 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		941EDDAA2C0C4F1F00CA3549 /* AddFriendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendViewController.swift; sourceTree = "<group>"; };
+		941EDDAC2C0C50B600CA3549 /* FriendFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendFirebase.swift; sourceTree = "<group>"; };
 		94A1BD512BF4ACED00C7528D /* DayOfChoice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DayOfChoice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94A1BD542BF4ACED00C7528D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		94A1BD562BF4ACED00C7528D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -134,7 +137,6 @@
 		94A1BD682BF4AE5400C7528D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		94A1BD732BF4B56000C7528D /* UserFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFirebase.swift; sourceTree = "<group>"; };
 		94A1BD752BF4B56B00C7528D /* QuestionFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionFirebase.swift; sourceTree = "<group>"; };
-		94A1BD772BF4B57600C7528D /* CustomQuestionFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomQuestionFirebase.swift; sourceTree = "<group>"; };
 		94A1BD792BF4B75E00C7528D /* Article.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Article.swift; sourceTree = "<group>"; };
 		94A1BD7B2BF4BB6500C7528D /* Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Manager.swift; sourceTree = "<group>"; };
 		94A1BD802BF9E21A00C7528D /* QuestionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionViewController.swift; sourceTree = "<group>"; };
@@ -214,7 +216,6 @@
 				94A1BD6F2BF4AF9600C7528D /* View */,
 				94A1BD702BF4AF9F00C7528D /* Controller */,
 				94A1BD712BF4AFB200C7528D /* Model */,
-				94A1BD5A2BF4ACED00C7528D /* Main.storyboard */,
 				94A1BD5D2BF4ACEE00C7528D /* Assets.xcassets */,
 				94A1BD5F2BF4ACEE00C7528D /* LaunchScreen.storyboard */,
 				94A1BD622BF4ACEE00C7528D /* Info.plist */,
@@ -226,6 +227,7 @@
 		94A1BD6F2BF4AF9600C7528D /* View */ = {
 			isa = PBXGroup;
 			children = (
+				94A1BD5A2BF4ACED00C7528D /* Main.storyboard */,
 				94A1BD8C2BFCE08B00C7528D /* NaturalLabel.swift */,
 				941EDD2A2BFDD3B500CA3549 /* CustomCell.swift */,
 			);
@@ -238,6 +240,8 @@
 				94A1BD802BF9E21A00C7528D /* QuestionViewController.swift */,
 				94A1BD842BFA31C500C7528D /* ResultViewController.swift */,
 				94A1BD8A2BFCD65F00C7528D /* LogViewController.swift */,
+				941EDDA82C0C4F1100CA3549 /* HomeViewController.swift */,
+				941EDDAA2C0C4F1F00CA3549 /* AddFriendViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -262,7 +266,7 @@
 			children = (
 				94A1BD732BF4B56000C7528D /* UserFirebase.swift */,
 				94A1BD752BF4B56B00C7528D /* QuestionFirebase.swift */,
-				94A1BD772BF4B57600C7528D /* CustomQuestionFirebase.swift */,
+				941EDDAC2C0C50B600CA3549 /* FriendFirebase.swift */,
 			);
 			path = Firebase;
 			sourceTree = "<group>";
@@ -403,8 +407,6 @@
 				941EDD892C05B35600CA3549 /* ResultViewController.swift in Sources */,
 				941EDD8A2C05B35600CA3549 /* DebugManager.swift in Sources */,
 				941EDD8B2C05B35600CA3549 /* Article.swift in Sources */,
-				941EDD8C2C05B35600CA3549 /* QuestionViewController.swift in Sources */,
-				941EDD8D2C05B35600CA3549 /* CustomQuestionFirebase.swift in Sources */,
 				941EDD8E2C05B35600CA3549 /* Realm.swift in Sources */,
 				941EDD8F2C05B35600CA3549 /* QuestionFirebase.swift in Sources */,
 				941EDD902C05B35600CA3549 /* Utility.swift in Sources */,
@@ -427,15 +429,17 @@
 				94A1BD832BF9E70B00C7528D /* Utility.swift in Sources */,
 				94A1BD8B2BFCD65F00C7528D /* LogViewController.swift in Sources */,
 				94A1BD892BFA4CA800C7528D /* Material.swift in Sources */,
+				941EDDA92C0C4F1100CA3549 /* HomeViewController.swift in Sources */,
 				941EDD322BFE1D9B00CA3549 /* Realm.swift in Sources */,
 				94A1BD8D2BFCE08B00C7528D /* NaturalLabel.swift in Sources */,
+				941EDDAB2C0C4F1F00CA3549 /* AddFriendViewController.swift in Sources */,
 				94A1BD742BF4B56000C7528D /* UserFirebase.swift in Sources */,
 				941EDD2B2BFDD3B500CA3549 /* CustomCell.swift in Sources */,
 				94A1BD7C2BF4BB6500C7528D /* Manager.swift in Sources */,
 				94A1BD852BFA31C500C7528D /* ResultViewController.swift in Sources */,
 				94A1BD552BF4ACED00C7528D /* AppDelegate.swift in Sources */,
-				94A1BD782BF4B57600C7528D /* CustomQuestionFirebase.swift in Sources */,
 				94A1BD572BF4ACED00C7528D /* SceneDelegate.swift in Sources */,
+				941EDDAD2C0C50B600CA3549 /* FriendFirebase.swift in Sources */,
 				94A1BD812BF9E21A00C7528D /* QuestionViewController.swift in Sources */,
 				941EDD342BFE516F00CA3549 /* DebugManager.swift in Sources */,
 				941EDD362C043CC000CA3549 /* Notification.swift in Sources */,

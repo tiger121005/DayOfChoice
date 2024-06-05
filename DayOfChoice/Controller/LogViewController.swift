@@ -138,7 +138,7 @@ extension LogViewController: UICollectionViewDataSource {
                             
                             if log.select == 1 {
                                 Image(systemName: "star.fill")
-                                    .foregroundColor(.blue)
+                                    .foregroundColor(.red)
                                     .frame(height: 12)
                                     .padding(.bottom, 15)
                             } else {

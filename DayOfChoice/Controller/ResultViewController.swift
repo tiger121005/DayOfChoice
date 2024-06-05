@@ -52,13 +52,13 @@ class ResultViewController: UIViewController {
         if manager.first {
             await questionFB.getPreResult()
         } else {
-            var realm: Realm {
+            let realm: Realm = {
                 var config = Realm.Configuration()
                 let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.Ito.taiga.DayOfChoice")
                 config.fileURL = url?.appendingPathComponent("db.realm")
                 let realm = try! Realm(configuration: config)
                 return realm
-            }
+            }()
             
             manager.logs = realm.objects(RealmData.self).map{Logs(question: $0.question, select1: $0.select1, select2: $0.select2, number1: $0.number1, number2: $0.number2, select: $0.select, id: $0.id)}.sorted(by: { Int($0.id)! > Int($1.id)! })
         }

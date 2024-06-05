@@ -24,22 +24,22 @@ class UserFirebase: ObservableObject {
     func createUser(id: String) async {
         
         do {
-            try db.collection("user").document(id).setData(from: User(name: "no name", friends: [], questions: [], minor: 0))
+            try db.collection("user").document(id).setData(from: User(name: "no name", minor: 0))
         } catch {
             print("Error create user")
         }
         
     }
     
-    func getUserInfo() async {
-        Task {
-            guard let uid = UserDefaultsKey.uid.get() else {
-                print("Cannot get uid")
-                return
-            }
-            manager.user = try await db.collection("user").document(uid).getDocument(as: User.self)
-        }
-    }
+//    func getUserInfo() async {
+//        Task {
+//            guard let uid = UserDefaultsKey.uid.get() else {
+//                print("Cannot get uid")
+//                return
+//            }
+//            manager.user = try await db.collection("user").document(uid).getDocument(as: User.self)
+//        }
+//    }
     
     
     func addAnswer(select: Int) async {
@@ -63,7 +63,6 @@ class UserFirebase: ObservableObject {
                     return realm
                 }
                 if let updatedata = realm.object(ofType: RealmData.self, forPrimaryKey: id) {
-                    
                     try! realm.write {
                         updatedata.select = select
                     }

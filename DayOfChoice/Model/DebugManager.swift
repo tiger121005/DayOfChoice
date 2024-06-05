@@ -9,14 +9,16 @@ import Foundation
 import RealmSwift
 
 struct DebugManager {
+    
+    static let shared = DebugManager()
     func addData22() {
-        var realm: Realm {
+        let realm: Realm = {
             var config = Realm.Configuration()
             let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.Ito.taiga.DayOfChoice")
             config.fileURL = url?.appendingPathComponent("db.realm")
             let realm = try! Realm(configuration: config)
             return realm
-        }
+        }()
         
         let data = RealmData()
         data.question = "麺を食べるなら？"
@@ -28,6 +30,29 @@ struct DebugManager {
         data.id = "20240522"
         try! realm.write {
             realm.add(data)
+        }
+    }
+    
+    
+    func deleteFriend() {
+        let realm: Realm = {
+            var config = Realm.Configuration()
+            let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.Ito.taiga.DayOfChoice")
+            config.fileURL = url?.appendingPathComponent("db.realm")
+            let realm = try! Realm(configuration: config)
+            return realm
+        }()
+        
+        let datas = realm.objects(FriendsData.self)
+        
+        for data in datas {
+            do{
+              try realm.write{
+                realm.delete(data)
+              }
+            }catch {
+              print("Error \(error)")
+            }
         }
     }
 }

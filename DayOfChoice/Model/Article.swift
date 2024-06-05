@@ -11,8 +11,6 @@ import SwiftUI
 
 public struct User: Codable {
     var name: String
-    var friends: [Friends]
-    var questions: [Question]
     var minor: Int
     @DocumentID var id: String?
 }
@@ -45,7 +43,7 @@ public struct Result: Codable {
     let number2: Int
 }
 
-public struct Friends: Codable {
+public struct Friend: Codable {
     let name: String
     var matchNum: Int
     let id: String
@@ -60,6 +58,7 @@ public struct ChartData {
 
 enum UserDefaultsKey: String {
     case uid = "uid"
+    case name = "name"
     
     func get() -> String? {
         return UserDefaults.standard.string(forKey: self.rawValue)

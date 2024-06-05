@@ -21,3 +21,12 @@ class RealmData: Object {
         return "id"
     }
 }
+
+class FriendsData: Object {
+    @objc dynamic var id: String = ""
+    @objc dynamic var matchNum: Int = 0
+    
+    override static func primaryKey() -> String? {
+        return "id"
+    }
+}

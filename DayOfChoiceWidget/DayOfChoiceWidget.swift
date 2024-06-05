@@ -19,13 +19,13 @@ struct Provider: TimelineProvider {
     func placeholder(in context: Context) -> WidgetData {
         WidgetData(date: Date(), question: "読み込み中", select1: "", select2: "")
     }
-
+    
     //Widget作成画面で表示するデータ
     func getSnapshot(in context: Context, completion: @escaping (WidgetData) -> ()) {
         let entry = WidgetData(date: Date(), question: "休みの日は？", select1: "家", select2: "外")
         completion(entry)
     }
-
+    
     //データを取得後に表示するデータ
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
         
@@ -33,57 +33,91 @@ struct Provider: TimelineProvider {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMMdd"
         
-        
-        var realm: Realm {
-            var config = Realm.Configuration()
-            let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.Ito.taiga.DayOfChoice")
-            config.fileURL = url?.appendingPathComponent("db.realm")
-            let realm = try! Realm(configuration: config)
-            return realm
-        }
-        
-        if let realmData = realm.object(ofType: RealmData.self, forPrimaryKey: formatter.string(from: currentDate)) {
-            if realmData.select != 0 {
-                let entries = [WidgetData(date: currentDate,
-                                      question: "次の質問を待ってね",
-                                      select1: "",
-                                      select2: "")]
-                completion(Timeline(entries: entries, policy: .atEnd))
-                return
+        Task {
+            var realm: Realm {
+                var config = Realm.Configuration()
+                let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.Ito.taiga.DayOfChoice")
+                config.fileURL = url?.appendingPathComponent("db.realm")
+                let realm = try! Realm(configuration: config)
+                return realm
             }
-            let entries = [WidgetData(date: currentDate,
-                                  question: realmData.question,
-                                  select1: realmData.select1,
-                                  select2: realmData.select2)]
-            completion(Timeline(entries: entries, policy: .atEnd))
-        } else {
-            FirebaseApp.configure()
-            let db = Firestore.firestore()
-            let id  = formatter.string(from: currentDate).suffix(4)
-            print(id)
-            db.collection("question").document(String(formatter.string(from: currentDate).suffix(4))).getDocument { (document, err) in
-                guard let document else {
-                    print("Error get question at widget 1 \(String(describing: err))")
-                    completion(Timeline(entries: [WidgetData(date: currentDate, question: "取得失敗", select1: "", select2: "")], policy: .atEnd))
-                    
+        
+            if let realmData = realm.object(ofType: RealmData.self, forPrimaryKey: formatter.string(from: currentDate)) {
+                if realmData.select != 0 {
+                    let entries = [WidgetData(date: currentDate,
+                                              question: "次の質問を待ってね",
+                                              select1: "",
+                                              select2: "")]
+                    completion(Timeline(entries: entries, policy: .atEnd))
                     return
                 }
-                do {
-                    let fbData = try document.data(as: Question.self)
-                    let realmData = RealmData()
-                    realmData.question = fbData.question
-                    realmData.select1 = fbData.select1
-                    realmData.select2 = fbData.select2
-                    realmData.id = formatter.string(from: currentDate)
-                    try! realm.write {
-                        realm.add(realmData)
-                    }
-                    completion(Timeline(entries: [WidgetData(date: currentDate, question: fbData.question, select1: fbData.select1, select2: fbData.select2)], policy: .atEnd))
-                } catch {
-                    print("Error get question at widget 2")
-                    completion(Timeline(entries: [WidgetData(date: currentDate, question: "取得失敗", select1: "", select2: "")], policy: .atEnd))
+            
+                if realmData.question == "取得失敗" {
+                    let question = await getQuestion()
+                    let entries = [WidgetData(date: currentDate,
+                                              question: question.question,
+                                              select1: question.select1,
+                                              select2: question.select2)]
+                    
+                    completion(Timeline(entries: entries, policy: .atEnd))
+                    return
                 }
+                let entries = [WidgetData(date: currentDate,
+                                          question: realmData.question,
+                                          select1: realmData.select1,
+                                          select2: realmData.select2)]
+                completion(Timeline(entries: entries, policy: .atEnd))
+            } else {
+                
+                let question = await getQuestion()
+                let entries = [WidgetData(date: currentDate,
+                                          question: question.question,
+                                          select1: question.select1,
+                                          select2: question.select2)]
+                completion(Timeline(entries: entries, policy: .atEnd))
+                
             }
+        }
+    }
+    
+    func getQuestion() async -> Question {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMdd"
+        let currentDate = Date()
+        FirebaseApp.configure()
+        let db = Firestore.firestore()
+        let id  = String(formatter.string(from: currentDate).suffix(4))
+        print(id)
+        do {
+            let question = try await db.collection("question").document(id).getDocument(as: Question.self)
+            
+            var realm: Realm {
+                var config = Realm.Configuration()
+                let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.Ito.taiga.DayOfChoice")
+                config.fileURL = url?.appendingPathComponent("db.realm")
+                let realm = try! Realm(configuration: config)
+                return realm
+            }
+            
+            let realmData = RealmData()
+            realmData.question = question.question
+            realmData.select1 = question.select1
+            realmData.select2 = question.select2
+            realmData.id = id
+            try! realm.write {
+                realm.add(realmData)
+            }
+            print(Question(question: question.question,
+                           select1: question.select1,
+                           select2: question.select2))
+            return Question(question: question.question,
+                            select1: question.select1,
+                            select2: question.select2)
+        } catch {
+            print("Error get question at widget 2")
+            return Question(question: "取得失敗",
+                            select1: "",
+                            select2: "")
         }
     }
 }
@@ -243,8 +277,9 @@ final class Vote {
                     print("Error add num")
                 }
             }
+            let ud = UserDefaults(suiteName: "group.com.Ito.taiga.DayOfChoice")
             
-            guard let uid = UserDefaultsKey.uid.get() else {
+            guard let uid = ud?.string(forKey: "uid") else {
                 print("Cannnot get uid")
                 return
             }

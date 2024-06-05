@@ -127,6 +127,11 @@ class QuestionFirebase: ObservableObject {
                 return
             }
         }
+        
+        if manager.logs.count < 2 {
+            return
+        }
+        
         let latest = manager.logs[1]
         let year = String(latest.id.prefix(4))
         let date = String(latest.id.suffix(4))

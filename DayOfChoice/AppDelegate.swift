@@ -63,8 +63,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // トリガーを設定（毎日午前8時に通知）
         var dateComponents = DateComponents()
         let noticeTime = utility.updateTime()
-        dateComponents.hour = noticeTime[0]
-        dateComponents.minute = noticeTime[1]
+        dateComponents.hour = 8
+        dateComponents.minute = 0
         
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
         
