@@ -43,7 +43,7 @@ public class FriendFirebase: ObservableObject {
             print("in get friend 2")
             let name = user.name
             print("in get friend 3")
-            return name
+            return "name"
             
         } catch {
             print("Error get friend")

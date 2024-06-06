@@ -167,46 +167,47 @@ struct MediumWidget: View {
     
     var body: some View {
         VStack {
+            Text(entry.question)
+                .frame(alignment: .center)
+            
             HStack {
-                Text(entry.question)
-                    .frame(minWidth: 120)
-                
-                VStack {
-                    Button(intent: Select1Intent()) {
-                        Text(entry.select1)
-                            .frame(width: 100)
-                    }
-                    .tint(.white)
-                    .background(
-                        RoundedRectangle(
-                            cornerRadius: .infinity,
-                            style: .continuous)
-                        .fill(.red)
-                    )
-                    
-                    Button(intent: Select2Intent()) {
-                        Text(entry.select2)
-                            .frame(width: 100)
-                    }
-                    .tint(.white)
-                    .background(
-                        RoundedRectangle(
-                            cornerRadius: .infinity,
-                            style: .continuous)
-                        .fill(.blue)
-                    )
+                Button(intent: Select1Intent()) {
+                    Text(entry.select1)
+                        .frame(width: 120, height: 60)
+                        
+                        .background(
+                            RoundedRectangle(
+                                cornerRadius: 10,
+                                style: .continuous)
+                            .fill(.red)
+                        )
+                        
                 }
+                .tint(.white)
+                
+                Button(intent: Select2Intent()) {
+                    Text(entry.select2)
+                        .frame(width: 120, height: 60)
+                        .background(
+                            RoundedRectangle(
+                                cornerRadius: 10,
+                                style: .continuous)
+                            .fill(.blue)
+                        )
+                            
+                }
+                .tint(.white)
             }
             
-            Button(intent: VoteIntent()) {
-                Text("投票")
-                    .frame(width: 120)
-            }
-            .tint(Color(uiColor: .systemBackground))
-            .background(RoundedRectangle(
-                cornerRadius: .infinity,
-                style: .continuous)
-                .fill(Color(uiColor: .label)))
+//            Button(intent: VoteIntent()) {
+//                Text("投票")
+//                    .frame(width: 120)
+//            }
+//            .tint(Color(uiColor: .systemBackground))
+//            .background(RoundedRectangle(
+//                cornerRadius: .infinity,
+//                style: .continuous)
+//                .fill(Color(uiColor: .label)))
             
         }
     }
@@ -240,17 +241,8 @@ struct DayOfChoiceWidget: Widget {
 final class Vote {
     private static var select = 0
     
-    static func select1() {
-        select = 1
-    }
-    
-    static func select2() {
-        select = 2
-    }
-    
-    static func vote() {
+    static func vote(select: Int) {
         Task {
-            print("select", select)
             FirebaseApp.configure()
             let db = Firestore.firestore()
             
@@ -258,25 +250,16 @@ final class Vote {
             formatter.dateFormat = "yyyyMMdd"
             let year = String(formatter.string(from: Date()).prefix(4))
             let date = String(formatter.string(from: Date()).suffix(4))
-            if select == 1 {
-                do {
-                    try await db.collection("question").document(date).collection("results").document(year).updateData([
-                        "number1": FieldValue.increment(Int64(1))
-                    ])
-                    print("Success vote from widget")
-                } catch {
-                    print("Error add num")
-                }
-            } else {
-                do {
-                    try await db.collection("question").document(date).collection("results").document(year).updateData([
-                        "number2": FieldValue.increment(Int64(1))
-                    ])
-                    print("Success vote from widget")
-                } catch {
-                    print("Error add num")
-                }
+            
+            do {
+                try await db.collection("question").document(date).collection("results").document(year).updateData([
+                    "number\(select)": FieldValue.increment(Int64(1))
+                ])
+                print("Success vote from widget")
+            } catch {
+                print("Error add num")
             }
+            
             let ud = UserDefaults(suiteName: "group.com.Ito.taiga.DayOfChoice")
             
             guard let uid = ud?.string(forKey: "uid") else {
@@ -305,8 +288,72 @@ final class Vote {
             } catch {
                 print("Error add answer")
             }
+            
+            
         }
     }
+    
+    
+    
+//    static func vote() {
+//        Task {
+//            print("select", select)
+//            FirebaseApp.configure()
+//            let db = Firestore.firestore()
+//            
+//            let formatter = DateFormatter()
+//            formatter.dateFormat = "yyyyMMdd"
+//            let year = String(formatter.string(from: Date()).prefix(4))
+//            let date = String(formatter.string(from: Date()).suffix(4))
+//            if select == 1 {
+//                do {
+//                    try await db.collection("question").document(date).collection("results").document(year).updateData([
+//                        "number1": FieldValue.increment(Int64(1))
+//                    ])
+//                    print("Success vote from widget")
+//                } catch {
+//                    print("Error add num")
+//                }
+//            } else {
+//                do {
+//                    try await db.collection("question").document(date).collection("results").document(year).updateData([
+//                        "number2": FieldValue.increment(Int64(1))
+//                    ])
+//                    print("Success vote from widget")
+//                } catch {
+//                    print("Error add num")
+//                }
+//            }
+//            let ud = UserDefaults(suiteName: "group.com.Ito.taiga.DayOfChoice")
+//            
+//            guard let uid = ud?.string(forKey: "uid") else {
+//                print("Cannnot get uid")
+//                return
+//            }
+//            
+//            let id = formatter.string(from: Date())
+//            do {
+//                try db.collection("user").document(uid).collection("answers").document(id).setData(from: Answer(select: select))
+//                
+//                let newAnswer = RealmData()
+//                var realm: Realm {
+//                    var config = Realm.Configuration()
+//                    let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.Ito.taiga.DayOfChoice")
+//                    config.fileURL = url?.appendingPathComponent("db.realm")
+//                    let realm = try! Realm(configuration: config)
+//                    return realm
+//                }
+//                if let updatedata = realm.object(ofType: RealmData.self, forPrimaryKey: id) {
+//                    
+//                    try! realm.write {
+//                        updatedata.select = select
+//                    }
+//                }
+//            } catch {
+//                print("Error add answer")
+//            }
+//        }
+//    }
 }
 
 
@@ -315,7 +362,8 @@ struct Select1Intent: AppIntent {
     
     func perform() async throws -> some IntentResult {
         print("Tap select1 button")
-        Vote.select1()
+        Vote.vote(select: 1)
+        WidgetCenter.shared.reloadAllTimelines()
         return .result()
     }
 }
@@ -325,24 +373,31 @@ struct Select2Intent: AppIntent {
     
     func perform() async throws -> some IntentResult {
         print("Tap select2 button")
-        Vote.select2()
+        Vote.vote(select: 2)
+        WidgetCenter.shared.reloadAllTimelines()
         return .result()
     }
 }
 
-struct VoteIntent: AppIntent {
-    static var title: LocalizedStringResource = "Vote"
-    
-    func perform() async throws -> some IntentResult {
-        print("Tap vote button")
-        Vote.vote()
-        
-        return .result()
-    }
-}
+//struct VoteIntent: AppIntent {
+//    static var title: LocalizedStringResource = "Vote"
+//    
+//    func perform() async throws -> some IntentResult {
+//        print("Tap vote button")
+//        Vote.vote()
+//        
+//        return .result()
+//    }
+//}
 
-#Preview(as: .systemSmall) {
+#Preview(as: .systemMedium) {
     DayOfChoiceWidget()
 } timeline: {
-    WidgetData(date: .now, question: "ここに質問が入る", select1: "ここに選択", select2: "ここに選択")
+    WidgetData(date: .now, question: "ここに質問が入る。どれだけいっぱい入るかな？", select1: "ここに選択", select2: "ここに選択")
 }
+
+//#Preview(as: .systemSmall) {
+//    DayOfChoiceWidget()
+//} timeline: {
+//    WidgetData(date: .now, question: "ここに質問が入る", select1: "ここに選択", select2: "ここに選択")
+//}

@@ -61,6 +61,7 @@
 		94A1BD892BFA4CA800C7528D /* Material.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1BD882BFA4CA800C7528D /* Material.swift */; };
 		94A1BD8B2BFCD65F00C7528D /* LogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1BD8A2BFCD65F00C7528D /* LogViewController.swift */; };
 		94A1BD8D2BFCE08B00C7528D /* NaturalLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1BD8C2BFCE08B00C7528D /* NaturalLabel.swift */; };
+		94D0F79C2C105E230093BD82 /* FriendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D0F79B2C105E230093BD82 /* FriendViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -145,6 +146,7 @@
 		94A1BD882BFA4CA800C7528D /* Material.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Material.swift; sourceTree = "<group>"; };
 		94A1BD8A2BFCD65F00C7528D /* LogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogViewController.swift; sourceTree = "<group>"; };
 		94A1BD8C2BFCE08B00C7528D /* NaturalLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaturalLabel.swift; sourceTree = "<group>"; };
+		94D0F79B2C105E230093BD82 /* FriendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -242,6 +244,7 @@
 				94A1BD8A2BFCD65F00C7528D /* LogViewController.swift */,
 				941EDDA82C0C4F1100CA3549 /* HomeViewController.swift */,
 				941EDDAA2C0C4F1F00CA3549 /* AddFriendViewController.swift */,
+				94D0F79B2C105E230093BD82 /* FriendViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -428,6 +431,7 @@
 				94A1BD762BF4B56B00C7528D /* QuestionFirebase.swift in Sources */,
 				94A1BD832BF9E70B00C7528D /* Utility.swift in Sources */,
 				94A1BD8B2BFCD65F00C7528D /* LogViewController.swift in Sources */,
+				94D0F79C2C105E230093BD82 /* FriendViewController.swift in Sources */,
 				94A1BD892BFA4CA800C7528D /* Material.swift in Sources */,
 				941EDDA92C0C4F1100CA3549 /* HomeViewController.swift in Sources */,
 				941EDD322BFE1D9B00CA3549 /* Realm.swift in Sources */,

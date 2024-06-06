@@ -44,7 +44,7 @@ class QuestionFirebase: ObservableObject {
         }
     }
     
-    func getQuestion() async -> Question? {
+    func getTodayQuestion() async -> Question? {
         await withCheckedContinuation { continuation in
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyyMMdd"
@@ -82,6 +82,17 @@ class QuestionFirebase: ObservableObject {
                     continuation.resume(returning: nil)
                 }
             }
+        }
+    }
+    
+    func getQuestion(id: String) async -> Question? {
+        do {
+            let question = try await db.collection("question").document(id).getDocument(as: Question.self)
+            
+            return question
+        } catch {
+            print("Error get question")
+            return nil
         }
     }
     

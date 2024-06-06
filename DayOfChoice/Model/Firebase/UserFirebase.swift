@@ -109,4 +109,20 @@ class UserFirebase: ObservableObject {
         }
     }
     
+    
+    func getAnswers(id: String) async -> [Answer] {
+        do {
+            let snapshot = try await db.collection("user").document(id).collection("answers").getDocuments()
+            var answers: [Answer] = []
+            for document in snapshot.documents {
+                answers.append(try document.data(as: Answer.self))
+            }
+            
+            return answers
+        } catch {
+            print("Error get answers")
+            return []
+        }
+    }
+    
 }

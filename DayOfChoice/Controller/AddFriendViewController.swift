@@ -23,6 +23,8 @@ class AddFriendViewController: UIViewController {
         super.viewDidLoad()
         setupSearchBar()
         setupBtn()
+        
+        
     }
     
     override func viewDidDisappear(_ animated: Bool) {

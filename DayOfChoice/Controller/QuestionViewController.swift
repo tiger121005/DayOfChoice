@@ -197,7 +197,7 @@ extension QuestionViewController {
             
             
             voteBtn.isEnabled = false
-            question = await questionFB.getQuestion()
+            question = await questionFB.getTodayQuestion()
             guard let question else {
                 select1Btn.isEnabled = false
                 select2Btn.isEnabled = false
