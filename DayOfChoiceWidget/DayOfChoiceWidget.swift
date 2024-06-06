@@ -29,11 +29,13 @@ struct Provider: TimelineProvider {
     //データを取得後に表示するデータ
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
         
+        print("start")
         let currentDate = Date()
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMMdd"
         
         Task {
+            print("in task")
             var realm: Realm {
                 var config = Realm.Configuration()
                 let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.Ito.taiga.DayOfChoice")
@@ -41,8 +43,12 @@ struct Provider: TimelineProvider {
                 let realm = try! Realm(configuration: config)
                 return realm
             }
+            
+            print("before judge")
         
+            
             if let realmData = realm.object(ofType: RealmData.self, forPrimaryKey: formatter.string(from: currentDate)) {
+                print("select", realmData.select)
                 if realmData.select != 0 {
                     let entries = [WidgetData(date: currentDate,
                                               question: "次の質問を待ってね",
@@ -52,6 +58,7 @@ struct Provider: TimelineProvider {
                     return
                 }
             
+                
                 if realmData.question == "取得失敗" {
                     let question = await getQuestion()
                     let entries = [WidgetData(date: currentDate,
@@ -62,13 +69,21 @@ struct Provider: TimelineProvider {
                     completion(Timeline(entries: entries, policy: .atEnd))
                     return
                 }
+                
+                print("before entries")
+                print("question", realmData.question)
+                print("select1", realmData.select1)
+                print("select2", realmData.select2)
+                
                 let entries = [WidgetData(date: currentDate,
                                           question: realmData.question,
                                           select1: realmData.select1,
                                           select2: realmData.select2)]
+                print("before completion")
                 completion(Timeline(entries: entries, policy: .atEnd))
             } else {
                 
+                print("start get question")
                 let question = await getQuestion()
                 let entries = [WidgetData(date: currentDate,
                                           question: question.question,
@@ -103,7 +118,7 @@ struct Provider: TimelineProvider {
             realmData.question = question.question
             realmData.select1 = question.select1
             realmData.select2 = question.select2
-            realmData.id = id
+            realmData.id = formatter.string(from: currentDate)
             try! realm.write {
                 realm.add(realmData)
             }
@@ -243,6 +258,7 @@ final class Vote {
     
     static func vote(select: Int) {
         Task {
+            
             FirebaseApp.configure()
             let db = Firestore.firestore()
             
@@ -251,27 +267,13 @@ final class Vote {
             let year = String(formatter.string(from: Date()).prefix(4))
             let date = String(formatter.string(from: Date()).suffix(4))
             
-            do {
-                try await db.collection("question").document(date).collection("results").document(year).updateData([
-                    "number\(select)": FieldValue.increment(Int64(1))
-                ])
-                print("Success vote from widget")
-            } catch {
-                print("Error add num")
-            }
-            
-            let ud = UserDefaults(suiteName: "group.com.Ito.taiga.DayOfChoice")
-            
-            guard let uid = ud?.string(forKey: "uid") else {
+            guard let uid = UserDefaultsKey.uid.get() else {
                 print("Cannnot get uid")
                 return
             }
             
             let id = formatter.string(from: Date())
             do {
-                try db.collection("user").document(uid).collection("answers").document(id).setData(from: Answer(select: select))
-                
-                let newAnswer = RealmData()
                 var realm: Realm {
                     var config = Realm.Configuration()
                     let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.Ito.taiga.DayOfChoice")
@@ -284,12 +286,27 @@ final class Vote {
                     try! realm.write {
                         updatedata.select = select
                     }
+                    
+                    print("Add", realm.objects(RealmData.self))
                 }
+                
+                try db.collection("user").document(uid).collection("answers").document(id).setData(from: Answer(select: select))
+                
+                let newAnswer = RealmData()
+                
             } catch {
                 print("Error add answer")
             }
             
             
+            do {
+                try await db.collection("question").document(date).collection("results").document(year).updateData([
+                    "number\(select)": FieldValue.increment(Int64(1))
+                ])
+                print("Success vote from widget")
+            } catch {
+                print("Error add num")
+            }
         }
     }
     

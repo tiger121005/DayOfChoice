@@ -127,6 +127,31 @@ class HomeViewController: UIViewController {
         idLabel.text = UserDefaultsKey.uid.get()
         print("in label 3")
     }
+    
+    @IBAction func changeName() {
+        let alert = UIAlertController(title: "名前の変更", message: "変更する名前を入力してください", preferredStyle: .alert)
+        var textFieldOnAlert = UITextField()
+        
+        alert.addTextField { textField in
+            textFieldOnAlert = textField
+            textFieldOnAlert.returnKeyType = .done
+        }
+        
+        let change = UIAlertAction(title: "変更", style: .default) {action in
+            
+            guard let name = textFieldOnAlert.text else {
+                print("Error get new name")
+                return
+            }
+            if name.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
+                return
+            }
+            UserDefaultsKey.name.set(value: name)
+        }
+        
+        alert.addAction(change)
+        present(alert, animated: true)
+    }
 }
 
 extension HomeViewController: UITableViewDelegate{
