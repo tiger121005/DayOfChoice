@@ -189,42 +189,36 @@ struct MediumWidget: View {
                 Button(intent: Select1Intent()) {
                     Text(entry.select1)
                         .frame(width: 120, height: 60)
+//                        .background(
+//                            RoundedRectangle(
+//                                cornerRadius: 10,
+//                                style: .continuous)
+//                            .fill(.red)
+//                        )
                         
-                        .background(
-                            RoundedRectangle(
-                                cornerRadius: 10,
-                                style: .continuous)
-                            .fill(.red)
-                        )
                         
                 }
+                .background(
+                    RoundedRectangle(cornerRadius: .infinity, style: .continuous)
+                        .fill(Color(uiColor: UIColor(red: 1, green: 0.1, blue: 0.1, alpha: 1)))
+                )
+                
                 .tint(.white)
                 
                 Button(intent: Select2Intent()) {
                     Text(entry.select2)
                         .frame(width: 120, height: 60)
-                        .background(
-                            RoundedRectangle(
-                                cornerRadius: 10,
-                                style: .continuous)
-                            .fill(.blue)
-                        )
-                            
+                         
                 }
+                .background(
+                    RoundedRectangle(cornerRadius: .infinity, style: .continuous)
+                        .fill(Color(uiColor: UIColor(red: 0, green: 0.15, blue: 1, alpha: 1)))
+                )
                 .tint(.white)
             }
             
-//            Button(intent: VoteIntent()) {
-//                Text("投票")
-//                    .frame(width: 120)
-//            }
-//            .tint(Color(uiColor: .systemBackground))
-//            .background(RoundedRectangle(
-//                cornerRadius: .infinity,
-//                style: .continuous)
-//                .fill(Color(uiColor: .label)))
-            
         }
+        
     }
 }
 

@@ -87,26 +87,23 @@ class HomeViewController: UIViewController {
             return realm
         }()
         
-        let friendDatas = realm.objects(FriendsData.self)
-        dump(friendDatas)
-        print(friendDatas.count)
+//        friends = realm.objects(FriendsData.self).map{Friend(name: $0.name, matchNum: $0.matchNum, id: $0.id)}
+        let friendDatas = Array(realm.objects(FriendsData.self))
         
-        
-        print("aaaaa")
         for data in friendDatas {
             do {
                 print("in for 1")
                 
-                let db = Firestore.firestore()
-                let user = try await db.collection("user").document(data.id).getDocument()
-                print(user)
+//                let db = Firestore.firestore()
+//                let user = try await db.collection("user").document(data.id).getDocument(as: User.self)
+                print("name")
                 print("in get friend 2")
-//                let name = user.name
-//                guard let name = await friendFB.getFriendName(id: data.id) else {
-//                    print("error get name")
-//                    continue
-//                }
-                //            print(name)
+                let name = "name"
+                guard let name = await friendFB.getFriendName(id: data.id) else {
+                    print("error get name")
+                    continue
+                }
+                print(name)
                 print("in for 2")
                 friends.append(Friend(name: "name", matchNum: data.matchNum, id: data.id))
                 print("in for 3")
@@ -147,6 +144,7 @@ class HomeViewController: UIViewController {
                 return
             }
             UserDefaultsKey.name.set(value: name)
+            self.nameLabel.text = name
         }
         
         alert.addAction(change)
