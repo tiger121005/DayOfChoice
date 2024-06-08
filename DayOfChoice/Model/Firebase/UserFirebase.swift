@@ -104,6 +104,21 @@ class UserFirebase: ObservableObject {
             try await db.collection("user").document(uid).updateData([
                 "minor": FieldValue.increment(Int64(1))
             ])
+            
+            guard let current = UserDefaultsKey.minor.get() else {
+                print("Error get minor")
+                return
+            }
+            
+            guard let int = Int(current) else {
+                print("Cannot to int")
+                return
+            }
+            
+            UserDefaultsKey.minor.set(value: String(int + 1))
+            
+            
+            
         } catch {
             print("Error add minor")
         }

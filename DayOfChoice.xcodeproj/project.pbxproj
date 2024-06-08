@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		941EDD2B2BFDD3B500CA3549 /* CustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941EDD2A2BFDD3B500CA3549 /* CustomCell.swift */; };
 		941EDD2E2BFE17ED00CA3549 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 941EDD2D2BFE17ED00CA3549 /* RealmSwift */; };
 		941EDD2F2BFE17F600CA3549 /* RealmSwift in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 941EDD2D2BFE17ED00CA3549 /* RealmSwift */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		941EDD322BFE1D9B00CA3549 /* Realm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941EDD312BFE1D9B00CA3549 /* Realm.swift */; };
@@ -28,7 +27,6 @@
 		941EDD8F2C05B35600CA3549 /* QuestionFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1BD752BF4B56B00C7528D /* QuestionFirebase.swift */; };
 		941EDD902C05B35600CA3549 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1BD822BF9E70B00C7528D /* Utility.swift */; };
 		941EDD912C05B35600CA3549 /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1BD7B2BF4BB6500C7528D /* Manager.swift */; };
-		941EDD922C05B35600CA3549 /* CustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941EDD2A2BFDD3B500CA3549 /* CustomCell.swift */; };
 		941EDD932C05B35600CA3549 /* NaturalLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1BD8C2BFCE08B00C7528D /* NaturalLabel.swift */; };
 		941EDD942C05B35600CA3549 /* LogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1BD8A2BFCD65F00C7528D /* LogViewController.swift */; };
 		941EDD952C05B35600CA3549 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941EDD352C043CC000CA3549 /* Notification.swift */; };
@@ -62,6 +60,12 @@
 		94A1BD8B2BFCD65F00C7528D /* LogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1BD8A2BFCD65F00C7528D /* LogViewController.swift */; };
 		94A1BD8D2BFCE08B00C7528D /* NaturalLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1BD8C2BFCE08B00C7528D /* NaturalLabel.swift */; };
 		94D0F79C2C105E230093BD82 /* FriendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D0F79B2C105E230093BD82 /* FriendViewController.swift */; };
+		94D0F79F2C12C31F0093BD82 /* CustomCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94D0F79E2C12C31F0093BD82 /* CustomCell.xib */; };
+		94D0F7A02C12C31F0093BD82 /* CustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D0F79D2C12C31F0093BD82 /* CustomCell.swift */; };
+		94D0F7A22C14B88D0093BD82 /* FirstTutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D0F7A12C14B88D0093BD82 /* FirstTutorialViewController.swift */; };
+		94D0F7A42C14B89D0093BD82 /* SecondTutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D0F7A32C14B89D0093BD82 /* SecondTutorialViewController.swift */; };
+		94D0F7A62C14B8AF0093BD82 /* ThirdTutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D0F7A52C14B8AF0093BD82 /* ThirdTutorialViewController.swift */; };
+		94D0F7A82C14B8CC0093BD82 /* TutorialPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D0F7A72C14B8CC0093BD82 /* TutorialPageViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -111,7 +115,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		941EDD2A2BFDD3B500CA3549 /* CustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCell.swift; sourceTree = "<group>"; };
 		941EDD312BFE1D9B00CA3549 /* Realm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Realm.swift; sourceTree = "<group>"; };
 		941EDD332BFE516E00CA3549 /* DebugManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugManager.swift; sourceTree = "<group>"; };
 		941EDD352C043CC000CA3549 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
@@ -147,6 +150,12 @@
 		94A1BD8A2BFCD65F00C7528D /* LogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogViewController.swift; sourceTree = "<group>"; };
 		94A1BD8C2BFCE08B00C7528D /* NaturalLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaturalLabel.swift; sourceTree = "<group>"; };
 		94D0F79B2C105E230093BD82 /* FriendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendViewController.swift; sourceTree = "<group>"; };
+		94D0F79D2C12C31F0093BD82 /* CustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCell.swift; sourceTree = "<group>"; };
+		94D0F79E2C12C31F0093BD82 /* CustomCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCell.xib; sourceTree = "<group>"; };
+		94D0F7A12C14B88D0093BD82 /* FirstTutorialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTutorialViewController.swift; sourceTree = "<group>"; };
+		94D0F7A32C14B89D0093BD82 /* SecondTutorialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondTutorialViewController.swift; sourceTree = "<group>"; };
+		94D0F7A52C14B8AF0093BD82 /* ThirdTutorialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThirdTutorialViewController.swift; sourceTree = "<group>"; };
+		94D0F7A72C14B8CC0093BD82 /* TutorialPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialPageViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -231,7 +240,8 @@
 			children = (
 				94A1BD5A2BF4ACED00C7528D /* Main.storyboard */,
 				94A1BD8C2BFCE08B00C7528D /* NaturalLabel.swift */,
-				941EDD2A2BFDD3B500CA3549 /* CustomCell.swift */,
+				94D0F79D2C12C31F0093BD82 /* CustomCell.swift */,
+				94D0F79E2C12C31F0093BD82 /* CustomCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -240,11 +250,15 @@
 			isa = PBXGroup;
 			children = (
 				94A1BD802BF9E21A00C7528D /* QuestionViewController.swift */,
+				941EDDA82C0C4F1100CA3549 /* HomeViewController.swift */,
 				94A1BD842BFA31C500C7528D /* ResultViewController.swift */,
 				94A1BD8A2BFCD65F00C7528D /* LogViewController.swift */,
-				941EDDA82C0C4F1100CA3549 /* HomeViewController.swift */,
 				941EDDAA2C0C4F1F00CA3549 /* AddFriendViewController.swift */,
 				94D0F79B2C105E230093BD82 /* FriendViewController.swift */,
+				94D0F7A72C14B8CC0093BD82 /* TutorialPageViewController.swift */,
+				94D0F7A12C14B88D0093BD82 /* FirstTutorialViewController.swift */,
+				94D0F7A32C14B89D0093BD82 /* SecondTutorialViewController.swift */,
+				94D0F7A52C14B8AF0093BD82 /* ThirdTutorialViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -390,6 +404,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94D0F79F2C12C31F0093BD82 /* CustomCell.xib in Resources */,
 				94A1BD5E2BF4ACEE00C7528D /* Assets.xcassets in Resources */,
 				94A1BD692BF4AE5400C7528D /* GoogleService-Info.plist in Resources */,
 				94A1BD612BF4ACEE00C7528D /* Base in Resources */,
@@ -414,7 +429,6 @@
 				941EDD8F2C05B35600CA3549 /* QuestionFirebase.swift in Sources */,
 				941EDD902C05B35600CA3549 /* Utility.swift in Sources */,
 				941EDD912C05B35600CA3549 /* Manager.swift in Sources */,
-				941EDD922C05B35600CA3549 /* CustomCell.swift in Sources */,
 				941EDD932C05B35600CA3549 /* NaturalLabel.swift in Sources */,
 				941EDD942C05B35600CA3549 /* LogViewController.swift in Sources */,
 				941EDD952C05B35600CA3549 /* Notification.swift in Sources */,
@@ -429,16 +443,20 @@
 			files = (
 				94A1BD7A2BF4B75E00C7528D /* Article.swift in Sources */,
 				94A1BD762BF4B56B00C7528D /* QuestionFirebase.swift in Sources */,
+				94D0F7A02C12C31F0093BD82 /* CustomCell.swift in Sources */,
 				94A1BD832BF9E70B00C7528D /* Utility.swift in Sources */,
 				94A1BD8B2BFCD65F00C7528D /* LogViewController.swift in Sources */,
 				94D0F79C2C105E230093BD82 /* FriendViewController.swift in Sources */,
 				94A1BD892BFA4CA800C7528D /* Material.swift in Sources */,
 				941EDDA92C0C4F1100CA3549 /* HomeViewController.swift in Sources */,
+				94D0F7A42C14B89D0093BD82 /* SecondTutorialViewController.swift in Sources */,
 				941EDD322BFE1D9B00CA3549 /* Realm.swift in Sources */,
 				94A1BD8D2BFCE08B00C7528D /* NaturalLabel.swift in Sources */,
 				941EDDAB2C0C4F1F00CA3549 /* AddFriendViewController.swift in Sources */,
+				94D0F7A62C14B8AF0093BD82 /* ThirdTutorialViewController.swift in Sources */,
+				94D0F7A22C14B88D0093BD82 /* FirstTutorialViewController.swift in Sources */,
+				94D0F7A82C14B8CC0093BD82 /* TutorialPageViewController.swift in Sources */,
 				94A1BD742BF4B56000C7528D /* UserFirebase.swift in Sources */,
-				941EDD2B2BFDD3B500CA3549 /* CustomCell.swift in Sources */,
 				94A1BD7C2BF4BB6500C7528D /* Manager.swift in Sources */,
 				94A1BD852BFA31C500C7528D /* ResultViewController.swift in Sources */,
 				94A1BD552BF4ACED00C7528D /* AppDelegate.swift in Sources */,
@@ -668,11 +686,14 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DayOfChoice/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "ニッタク";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIStatusBarStyle = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -699,11 +720,14 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DayOfChoice/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "ニッタク";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIStatusBarStyle = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

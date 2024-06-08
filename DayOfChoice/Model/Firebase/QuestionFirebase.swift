@@ -87,7 +87,8 @@ class QuestionFirebase: ObservableObject {
     
     func getQuestion(id: String) async -> Question? {
         do {
-            let question = try await db.collection("question").document(id).getDocument(as: Question.self)
+            let questionID = String(id.suffix(4))
+            let question = try await db.collection("question").document(questionID).getDocument(as: Question.self)
             
             return question
         } catch {
@@ -121,7 +122,7 @@ class QuestionFirebase: ObservableObject {
 //        }
 //    }
     
-    func getPreResult() async {
+    func getPreResult(id: String, select: Int) async {
         var realm: Realm {
             var config = Realm.Configuration()
             let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.Ito.taiga.DayOfChoice")
@@ -131,41 +132,47 @@ class QuestionFirebase: ObservableObject {
         }
         
         
-        await MainActor.run {
-            manager.logs = realm.objects(RealmData.self).map{Logs(question: $0.question, select1: $0.select1, select2: $0.select2, number1: $0.number1, number2: $0.number2, select: $0.select, id: $0.id)}.sorted(by: {Int($0.id)! > Int($1.id)!})
-            if manager.logs.count < 2 {
-                print("Error get pre result")
-                return
-            }
-        }
+//        await MainActor.run {
+//            manager.logs = realm.objects(RealmData.self).map{Logs(question: $0.question, select1: $0.select1, select2: $0.select2, number1: $0.number1, number2: $0.number2, select: $0.select, id: $0.id)}.sorted(by: {Int($0.id)! > Int($1.id)!})
+//            if manager.logs.count < 2 {
+//                print("Error get pre result")
+//                return
+//            }
+//        }
         
-        if manager.logs.count < 2 {
+//        if manager.logs.count < 2 {
+//            return
+//        }
+        
+//        let latest = manager.logs[1]
+        let year = String(id.prefix(4))
+        let date = String(id.suffix(4))
+        guard let data = realm.object(ofType: RealmData.self, forPrimaryKey: id) else {
             return
         }
         
-        let latest = manager.logs[1]
-        let year = String(latest.id.prefix(4))
-        let date = String(latest.id.suffix(4))
-        
+        if  data.number1 != 0 && data.number2 != 0 {
+            return
+        }
         do {
             
             let result = try await db.collection("question").document(date).collection("results").document(year).getDocument(as: Result.self)
             
             await MainActor.run {
-                if let questionUpdate = realm.object(ofType: RealmData.self, forPrimaryKey: latest.id) {
+                if let questionUpdate = realm.object(ofType: RealmData.self, forPrimaryKey: id) {
                     print(4, Thread.current)
                     try! realm.write {
                         questionUpdate.number1 = result.number1
                         questionUpdate.number2 = result.number2
                     }
                     
-                    manager.logs[1].number1 = result.number1
-                    manager.logs[1].number2 = result.number2
+//                    manager.logs[1].number1 = result.number1
+//                    manager.logs[1].number2 = result.number2
                 }
             }
-            if result.number1 > result.number2 && manager.logs[1].select == 2 {
+            if result.number1 > result.number2 && select == 2 {
                 await userFB.addMinor()
-            } else if result.number1 < result.number2 && manager.logs[1].select == 1 {
+            } else if result.number1 < result.number2 && select == 1 {
                 await userFB.addMinor()
             }
             

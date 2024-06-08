@@ -2,81 +2,32 @@
 //  CustomCell.swift
 //  DayOfChoice
 //
-//  Created by TAIGA ITO on 2024/05/22.
+//  Created by TAIGA ITO on 2024/06/07.
 //
 
-import SwiftUI
-import Charts
+import UIKit
 
-struct CustomCell: View {
+class CustomCell: UITableViewCell {
     
-    @State private var datas: [ChartData]
-    var select: Int
+    @IBOutlet var answerLabel: UILabel!
+    @IBOutlet var questionLabel: UILabel!
     
-    init(title1: String, number1: Int, title2: String, number2: Int, select: Int) {
-        datas = [ChartData(title: title2,
-                           number: Double(number2),
-                           color: .blue),
-                 ChartData(title: title1, 
-                           number: Double(number1),
-                           color: .red)]
-        self.select = select
-                
-    }
+    @IBOutlet var myAnswerLabel: UILabel!
     
-    var body: some View {
-        VStack {
-            Chart(datas, id: \.title) { data in
-                SectorMark(angle: .value("number", data.number))
-                    .foregroundStyle(data.color)
-            }
-            .padding(40)
-            
-            HStack {
-                VStack {
-                    Text("\(rate1()) %")
-                        .foregroundStyle(Color.red)
-                        .font(.largeTitle)
-                        
-                    Text(datas[1].title)
-                        .foregroundStyle(Color.red)
-                        .font(.title)
-                    
-                    Image(systemName: select == 1 ? "star.fill":"")
-                        .foregroundColor(.red)
-                }
-                .padding(10)
-                
-                VStack {
-                    
-                    Text("\(rate2()) %")
-                        .foregroundStyle(Color.blue)
-                        .font(.largeTitle)
-                    Text(datas[1].title)
-                        .foregroundStyle(Color.blue)
-                        .font(.title)
-                    
-                    Image(systemName: select == 2 ? "star.fill":"")
-                        .foregroundColor(.blue)
-                        
-                }
-                .padding(10)
-                
-            }
-        }
-    }
-    
-    func rate1() -> String {
-        let double = round(datas[1].number / (datas[0].number + datas[1].number) * 1000) / 10
-        return String(String(double).prefix(4))
-    }
-    
-    func rate2() -> String {
-        let double = round(datas[1].number / (datas[0].number + datas[1].number) * 1000) / 10
-        return String(String(100 - double).prefix(4))
-    }
-}
+    @IBOutlet var matchView: UIView!
 
-#Preview {
-    CustomCell(title1: "umi", number1: 483, title2: "yama", number2: 736, select: 2)
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        // Initialization code
+        
+        matchView.layer.cornerRadius = 5
+        matchView.layer.cornerCurve = .continuous
+    }
+
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+
+        // Configure the view for the selected state
+    }
+    
 }

@@ -38,12 +38,9 @@ public class FriendFirebase: ObservableObject {
     
     func getFriendName(id: String) async -> String? {
         do {
-            print("in get friend 1")
             let user = try await db.collection("user").document(id).getDocument().data(as: User.self)
-            print("in get friend 2")
             let name = user.name
-            print("in get friend 3")
-            return "name"
+            return name
             
         } catch {
             print("Error get friend")

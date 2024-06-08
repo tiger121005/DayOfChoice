@@ -34,7 +34,7 @@ class ResultViewController: UIViewController {
     let blueView = UIView()
     
     
-    var log: Logs?
+    var log: Logs!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,6 +70,8 @@ class ResultViewController: UIViewController {
     }
     
     func setupView() {
+        yourSelect1.isHidden = true
+        yourSelect2.isHidden = true
 //        showLogBtn.layer.cornerRadius = showLogBtn.frame.height / 2
 //        showLogBtn.layer.cornerCurve = .continuous
 //        
@@ -83,17 +85,17 @@ class ResultViewController: UIViewController {
     func setupData() async {
         
         if manager.first {
-            await questionFB.getPreResult()
+//            await questionFB.getPreResult()
         } else {
-            let realm: Realm = {
-                var config = Realm.Configuration()
-                let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.Ito.taiga.DayOfChoice")
-                config.fileURL = url?.appendingPathComponent("db.realm")
-                let realm = try! Realm(configuration: config)
-                return realm
-            }()
+//            let realm: Realm = {
+//                var config = Realm.Configuration()
+//                let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.Ito.taiga.DayOfChoice")
+//                config.fileURL = url?.appendingPathComponent("db.realm")
+//                let realm = try! Realm(configuration: config)
+//                return realm
+//            }()
             
-            manager.logs = realm.objects(RealmData.self).map{Logs(question: $0.question, select1: $0.select1, select2: $0.select2, number1: $0.number1, number2: $0.number2, select: $0.select, id: $0.id)}.sorted(by: { Int($0.id)! > Int($1.id)! })
+            
         }
         
         
@@ -101,24 +103,40 @@ class ResultViewController: UIViewController {
 //        let realm = try! await Realm()
         
 //        manager.logs = realm.objects(RealmData.self).map{Logs(question: $0.question, select1: $0.select1, select2: $0.select2, number1: $0.number1, number2: $0.number2, select: $0.select, id: $0.id)}.sorted(by: { Int($0.id)! > Int($1.id)! })
+        let realm: Realm = {
+            var config = Realm.Configuration()
+            let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.Ito.taiga.DayOfChoice")
+            config.fileURL = url?.appendingPathComponent("db.realm")
+            let realm = try! Realm(configuration: config)
+            return realm
+        }()
         
-        dump(manager.logs)
-        if manager.logs.count < 2 {
+        let logs = realm.objects(RealmData.self).map{Logs(question: $0.question, select1: $0.select1, select2: $0.select2, number1: $0.number1, number2: $0.number2, select: $0.select, id: $0.id)}.sorted{Int($0.id)! > Int($1.id)!}
+        
+        if logs.count < 2 {
             print("Cannot read question")
             
             return
         }
-        log = manager.logs[1]
+        
+        log = logs[1]
+        
+        
+        guard let log else {
+            print("Error get log")
+            return
+        }
         
         Task { @MainActor in
-            questionLabel.text = manager.logs[1].question
+            questionLabel.text = log.question
             questionLabel.naturalize()
-            select1Label.text = log?.select1
-            select2Label.text = log?.select2
-            if log?.select == 1 {
-                yourSelect2.isHidden = true
+            select1Label.text = log.select1
+            select2Label.text = log.select2
+            
+            if log.select == 1 {
+                yourSelect1.isHidden = false
             } else {
-                yourSelect1.isHidden = true
+                yourSelect2.isHidden = false
             }
             
             rate1Label.text = ""
@@ -294,6 +312,8 @@ class ResultViewController: UIViewController {
         let redData = CGFloat(number1)
         let blueData = CGFloat(number2)
         
+        print("redData", redData)
+        print("blueData", blueData)
         let redRate = redData / (redData + blueData)
         
         return redRate

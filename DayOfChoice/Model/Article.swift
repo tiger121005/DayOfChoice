@@ -59,6 +59,7 @@ public struct ChartData {
 enum UserDefaultsKey: String {
     case uid = "uid"
     case name = "name"
+    case minor = "0"
     
     func get() -> String? {
         return UserDefaults(suiteName: "group.com.Ito.taiga.DayOfChoice")?.string(forKey: self.rawValue)

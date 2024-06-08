@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 class FriendViewController: UIViewController {
     
@@ -20,11 +21,33 @@ class FriendViewController: UIViewController {
     var answers: [Answer] = []
     var questions: [Question] = []
     
+    var matchNum = 0
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        setupTableView()
+        Task {
+            await getAnswers()
+            await getQuestions()
+        }
+//        questions = [Question(question: "bvaiurbva", select1: "nvie", select2: "bvnkaf", id: "20240604")]
+//        answers = [Answer(select: 2, id: "0604")]
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+//        Task {
+//            await getAnswers()
+//            await getQuestions()
+//        }
+    }
+    
+    func setupTableView() {
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(UINib(nibName: "CustomCell", bundle: nil), forCellReuseIdentifier: "CustomCell")
     }
     
     func getAnswers() async {
@@ -35,6 +58,7 @@ class FriendViewController: UIViewController {
 
     func getQuestions() async {
         Task {
+            questions = []
             for answer in answers {
                 guard let question = await questionFB.getQuestion(id: answer.id ?? "") else {
                     continue
@@ -42,20 +66,70 @@ class FriendViewController: UIViewController {
                 
                 questions.append(question)
             }
+            dump(questions)
+            matchNum = 0
+            tableView.reloadData()
         }
     }
 }
 
 extension FriendViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        print("count", questions.count)
         return questions.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CustomCell", for: indexPath) as! CustomCell
+        
+        let question = questions[indexPath.row]
+        let answer = answers[indexPath.row]
+        
+        if answer.select == 1 {
+            cell.answerLabel.text = question.select1
+        } else {
+            cell.answerLabel.text = question.select2
+        }
+        
+        cell.questionLabel.text = "\(question.question)    \(question.select1) or \(question.select2)"
+        
+        let realm: Realm = {
+            var config = Realm.Configuration()
+            let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.Ito.taiga.DayOfChoice")
+            config.fileURL = url?.appendingPathComponent("db.realm")
+            let realm = try! Realm(configuration: config)
+            return realm
+        }()
+        
+        print("answer id", answer.id)
+        guard let myAnser = realm.object(ofType: RealmData.self, forPrimaryKey: answer.id) else {
+            print("Cannot find my answer")
+            return cell
+        }
+        
+        if myAnser.select == 1 {
+            cell.myAnswerLabel.text = question.select1
+        } else {
+            cell.myAnswerLabel.text = question.select2
+        }
+        
+        if myAnser.select == answer.select {
+            cell.matchView.backgroundColor = .green
+            matchNum += 1
+            
+            matchLabel.text = "\(matchNum)回"
+            print("green")
+        } else {
+            cell.matchView.backgroundColor = .red
+            print("red")
+        }
+        
         
         return cell
     }
     
+}
+
+extension FriendViewController: UITableViewDelegate {
     
 }

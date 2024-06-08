@@ -8,6 +8,7 @@
 import UIKit
 import SwiftUI
 import Charts
+import RealmSwift
 
 class LogViewController: UIViewController {
     
@@ -22,24 +23,33 @@ class LogViewController: UIViewController {
     let questionFB = QuestionFirebase.shared
     let material = Material.shared
     
+    var logs: [Logs] = []
+    var minor = 0
+    
 //    var results: [Result] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupLogView()
-        setupCollectionView()
+        Task {
+            await setupCollectionView()
+            setupLogView()
+            
+        }
     }
     
     func setupLogView() {
-        logView.layer.cornerCurve = .continuous
-        logView.layer.cornerRadius = 20
-        logView.layer.shadowColor = UIColor.black.cgColor
-        logView.layer.shadowOffset = CGSize(width: 0, height: 5)
-        logView.layer.shadowRadius = CGFloat(5)
-        logView.layer.shadowOpacity = 0.7
-        voteNumLabel.text = "\(manager.logs.count) 回"
-        minorRateLabel.text = "\(round(Double(manager.user.minor) / Double(manager.logs.count) * 1000) / 10) ％"
+//        logView.layer.cornerCurve = .continuous
+//        logView.layer.cornerRadius = 20
+//        logView.layer.shadowColor = UIColor.black.cgColor
+//        logView.layer.shadowOffset = CGSize(width: 0, height: 5)
+//        logView.layer.shadowRadius = CGFloat(5)
+//        logView.layer.shadowOpacity = 0.7
+        
+        voteNumLabel.text = "\(logs.count - 1) 回"
+//        if let minor = UserDefaultsKey.minor.get() {
+//            minorRateLabel.text = "\(round(Double(Int(minor) ?? 0) / Double(logs.count) * 1000) / 10) ％"
+//        }
         
         let red = CAGradientLayer()
         red.frame = CGRect(x: 0, y: 0, width: redBorder.frame.width, height: redBorder.frame.height)
@@ -57,37 +67,46 @@ class LogViewController: UIViewController {
         
     }
     
-    func setupCollectionView() {
+    func setupCollectionView() async {
         collectionView.delegate = self
         collectionView.dataSource = self
-//        collectionView.register(UINib(nibName: "CustomCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "CustomCell")
+        //        collectionView.register(UINib(nibName: "CustomCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "CustomCell")
         
-        Task {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "yyyyMMdd"
-            let todayID = formatter.string(from: Date())
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMdd"
+        let todayID = formatter.string(from: Date())
+        
+        let realm: Realm = {
+            var config = Realm.Configuration()
+            let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.Ito.taiga.DayOfChoice")
+            config.fileURL = url?.appendingPathComponent("db.realm")
+            let realm = try! Realm(configuration: config)
+            return realm
+        }()
+        
+        logs = realm.objects(RealmData.self).map{Logs(question: $0.question, select1: $0.select1, select2: $0.select2, number1: $0.number1, number2: $0.number2, select: $0.select, id: $0.id)}.sorted{Int($0.id)! > Int($1.id)!}
+        
+        for log in logs {
             
-            for log in self.manager.logs {
-                
-                if log.id == todayID {
-                    continue
-                }
-                
-//                guard let result = await self.questionFB.getResult(id: log.id) else {
-//                    continue
-//                }
-//                self.results.append(result)
+            if log.id == todayID {
+                continue
             }
             
-            collectionView.reloadData()
+            //                guard let result = await self.questionFB.getResult(id: log.id) else {
+            //                    continue
+            //                }
+            //                self.results.append(result)
         }
+        
+        collectionView.reloadData()
     }
 
 }
 
 extension LogViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        manager.logs.count - 1
+        logs.count - 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -99,10 +118,18 @@ extension LogViewController: UICollectionViewDataSource {
         //            title2: manager.logs[indexPath.row + 1].select2,
         //            number2: manager.logs[indexPath.row + 1].number2,
         //            select: manager.logs[indexPath.row + 1].select) as? any UIContentConfiguration
-        let log = manager.logs[indexPath.row + 1]
+        let log = logs[indexPath.row + 1]
         
         let datas = [ChartData(title: log.select2, number: Double(log.number2), color: .blue),
                      ChartData(title: log.select1, number: Double(log.number1), color: .red)]
+        
+        if log.number1 < log.number2 && log.select == 1 {
+            minor += 1
+        } else if log.number1 > log.number2 && log.select == 2 {
+            minor += 1
+        }
+        minorRateLabel.text = "\(round(Double(minor) / Double(logs.count - 1) * 1000) / 10) ％"
+        
         
         cell.contentConfiguration = UIHostingConfiguration {
             ZStack {
@@ -133,7 +160,7 @@ extension LogViewController: UICollectionViewDataSource {
                             
                             Text(datas[0].title)
                                 .foregroundStyle(Color.red)
-                                .font(.body)
+                                .font(.footnote)
                             
                             
                             if log.select == 1 {
@@ -159,7 +186,7 @@ extension LogViewController: UICollectionViewDataSource {
                                 .font(.title3)
                             Text(datas[1].title)
                                 .foregroundStyle(Color.blue)
-                                .font(.body)
+                                .font(.footnote)
                             
                             if log.select == 2 {
                                 Image(systemName: "star.fill")
@@ -180,7 +207,7 @@ extension LogViewController: UICollectionViewDataSource {
                     }
                 }
             }
-            .frame(width: UIScreen.main.bounds.width * 0.4)
+            .frame(width: UIScreen.main.bounds.width * 0.43)
         }
         
         

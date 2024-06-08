@@ -70,16 +70,17 @@ class QuestionViewController: UIViewController {
             await questionFB.addNum(select: selectNum)
             
             //前回の投票分
-            guard let preQuestionID = await self.getPreQuestion() else {
-                print("Cannot get pre question")
-                self.performSegue(withIdentifier: "toResult", sender: nil)
-                return
-            }
-            let friendIDs = getFriends()
+//            guard let preQuestionID = await self.getPreQuestion() else {
+//                print("Cannot get pre question")
+//                self.performSegue(withIdentifier: "toResult", sender: nil)
+//                return
+//            }
+//            let friendIDs = getFriends()
+//            
+//            for id in friendIDs {
+//                await friendFB.judgeMatch(uid: id, questionID: preQuestionID)
+//            }
             
-            for id in friendIDs {
-                await friendFB.judgeMatch(uid: id, questionID: preQuestionID)
-            }
             
             
             self.performSegue(withIdentifier: "toResult", sender: nil)
@@ -123,8 +124,13 @@ extension QuestionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+//        DebugManager.shared.updateData(id: "20240606")
+        
+        
+        
         Task {
-            
+//            await DebugManager.shared.getAllAnswers(id: UserDefaultsKey.uid.get()!)
+//            DebugManager.shared.addData()
             print(UserDefaultsKey.uid.get())
             checkFirst()
             await setupData()
@@ -136,7 +142,17 @@ extension QuestionViewController {
         
     }
     
+    override func viewDidLayoutSubviews() {
+        
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
+        UserDefaultsKey.name.remove()
+        
+        if UserDefaultsKey.name.get() == nil {
+            performSegue(withIdentifier: "toTutorial", sender: nil)
+        }
+        
         setName()
     }
     
@@ -192,6 +208,9 @@ extension QuestionViewController {
                     await userFB.createUser(id: uid)
                     UserDefaultsKey.uid.set(value: uid)
                     
+                }
+                if UserDefaultsKey.minor.get() == nil {
+                    UserDefaultsKey.minor.set(value: "0")
                 }
                 
             } catch {
@@ -253,6 +272,7 @@ extension QuestionViewController {
             }
             
             UserDefaultsKey.name.set(value: name)
+            UserDefaultsKey.minor.set(value: "0")
         }
     }
     

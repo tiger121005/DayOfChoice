@@ -15,8 +15,10 @@ class HomeViewController: UIViewController {
     @IBOutlet var tableView: UITableView!
     @IBOutlet var nameLabel: UILabel!
     @IBOutlet var idLabel: UILabel!
+    @IBOutlet var copyLabel: UILabel!
     
     var friends: [Friend] = []
+    let questionFB = QuestionFirebase.shared
     let friendFB = FriendFirebase.shared
     var selectFriend: Friend!
 
@@ -42,21 +44,17 @@ class HomeViewController: UIViewController {
 //        } catch {
 //            print("Error delete")
 //        }
-        
-
-        print(1)
-        setupTableView()
-        print(2)
-        setuplabel()
-        print(3)
+        Task {
+            await setupLogData()
+            setupTableView()
+            setuplabel()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         Task {
-            print(4)
-            await setupData()
-            print(5)
+            await setupFriendData()
         }
     }
     
@@ -68,17 +66,13 @@ class HomeViewController: UIViewController {
     }
 
     func setupTableView() {
-        print("in set table view 1")
         tableView.dataSource = self
-        print("in set table view 2")
         tableView.delegate = self
-        print("in set table view 3")
         
         tableView.backgroundColor = .white
-        print("in set table view 4")
     }
-
-    func setupData() async {
+    
+    func setupLogData() async {
         let realm: Realm = {
             var config = Realm.Configuration()
             let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.Ito.taiga.DayOfChoice")
@@ -87,42 +81,49 @@ class HomeViewController: UIViewController {
             return realm
         }()
         
-//        friends = realm.objects(FriendsData.self).map{Friend(name: $0.name, matchNum: $0.matchNum, id: $0.id)}
+        let logs = realm.objects(RealmData.self).map{Logs(question: $0.question, select1: $0.select1, select2: $0.select2, number1: $0.number1, number2: $0.number2, select: $0.select, id: $0.id)}.sorted{Int($0.id)! > Int($1.id)!}
+        
+        print("log count", logs.count)
+        if logs.count < 2 {
+            return
+        }
+        
+        let log = logs[1]
+        
+        await questionFB.getPreResult(id: log.id, select: log.select)
+        dump(realm.objects(RealmData.self))
+        
+    }
+
+    func setupFriendData() async {
+        let realm: Realm = {
+            var config = Realm.Configuration()
+            let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.Ito.taiga.DayOfChoice")
+            config.fileURL = url?.appendingPathComponent("db.realm")
+            let realm = try! Realm(configuration: config)
+            return realm
+        }()
+        
         let friendDatas = Array(realm.objects(FriendsData.self))
         
+        friends = []
         for data in friendDatas {
-            do {
-                print("in for 1")
-                
-//                let db = Firestore.firestore()
-//                let user = try await db.collection("user").document(data.id).getDocument(as: User.self)
-                print("name")
-                print("in get friend 2")
-                let name = "name"
-                guard let name = await friendFB.getFriendName(id: data.id) else {
-                    print("error get name")
-                    continue
-                }
-                print(name)
-                print("in for 2")
-                friends.append(Friend(name: "name", matchNum: data.matchNum, id: data.id))
-                print("in for 3")
-                print(friends)
-            } catch {
-                print("Error get friend")
+            guard let name = await friendFB.getFriendName(id: data.id) else {
+                print("error get name")
+                continue
             }
+            friends.append(Friend(name: name, matchNum: data.matchNum, id: data.id))
+            
         }
-        print("Reload tableView")
         tableView.reloadData()
         
     }
     
     func setuplabel() {
-        print("in label 1")
         nameLabel.text = UserDefaultsKey.name.get()
-        print("in label 2")
         idLabel.text = UserDefaultsKey.uid.get()
-        print("in label 3")
+        
+        copyLabel.isHidden = true
     }
     
     @IBAction func changeName() {
@@ -150,6 +151,17 @@ class HomeViewController: UIViewController {
         alert.addAction(change)
         present(alert, animated: true)
     }
+    
+    @IBAction func copyID() {
+        UIPasteboard.general.string = UserDefaultsKey.uid.get() ?? ""
+        Task {
+            copyLabel.isHidden = false
+            try await Task.sleep(nanoseconds: 1 * 1_000_000_000) // Sleep for 2 seconds
+            await MainActor.run {
+                copyLabel.isHidden = true
+            }
+        }
+    }
 }
 
 extension HomeViewController: UITableViewDelegate{
@@ -167,13 +179,9 @@ extension HomeViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        print("in table view 1")
         cell.textLabel?.text = friends[indexPath.row].name
-        print("in table view 2")
         cell.backgroundColor = .white
-        print("in table view 3")
         cell.textLabel?.textColor = .black
-        print("in table view 4")
         return cell
     }
     
