@@ -26,7 +26,6 @@ class LogViewController: UIViewController {
     var logs: [Logs] = []
     var minor = 0
     
-//    var results: [Result] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,17 +38,8 @@ class LogViewController: UIViewController {
     }
     
     func setupLogView() {
-//        logView.layer.cornerCurve = .continuous
-//        logView.layer.cornerRadius = 20
-//        logView.layer.shadowColor = UIColor.black.cgColor
-//        logView.layer.shadowOffset = CGSize(width: 0, height: 5)
-//        logView.layer.shadowRadius = CGFloat(5)
-//        logView.layer.shadowOpacity = 0.7
         
         voteNumLabel.text = "\(logs.count - 1) 回"
-//        if let minor = UserDefaultsKey.minor.get() {
-//            minorRateLabel.text = "\(round(Double(Int(minor) ?? 0) / Double(logs.count) * 1000) / 10) ％"
-//        }
         
         let red = CAGradientLayer()
         red.frame = CGRect(x: 0, y: 0, width: redBorder.frame.width, height: redBorder.frame.height)
@@ -85,7 +75,9 @@ class LogViewController: UIViewController {
             return realm
         }()
         
-        logs = realm.objects(RealmData.self).map{Logs(question: $0.question, select1: $0.select1, select2: $0.select2, number1: $0.number1, number2: $0.number2, select: $0.select, id: $0.id)}.sorted{Int($0.id)! > Int($1.id)!}
+        logs = realm.objects(RealmData.self).map{Logs(question: $0.question, select1: $0.select1, select2: $0.select2, number1: $0.number1, number2: $0.number2, select: $0.select, id: $0.id)}.sorted{Int($0.id)! > Int($1.id)!}.filter{$0.select != 0}
+        
+        
         
         for log in logs {
             
@@ -93,10 +85,6 @@ class LogViewController: UIViewController {
                 continue
             }
             
-            //                guard let result = await self.questionFB.getResult(id: log.id) else {
-            //                    continue
-            //                }
-            //                self.results.append(result)
         }
         
         collectionView.reloadData()
@@ -112,12 +100,7 @@ extension LogViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CustomCell", for: indexPath)
         
-        //        cell.contentConfiguration = CustomCell(
-        //            title1: manager.logs[indexPath.row + 1].select1,
-        //            number1: manager.logs[indexPath.row + 1].number1,
-        //            title2: manager.logs[indexPath.row + 1].select2,
-        //            number2: manager.logs[indexPath.row + 1].number2,
-        //            select: manager.logs[indexPath.row + 1].select) as? any UIContentConfiguration
+        
         let log = logs[indexPath.row + 1]
         
         let datas = [ChartData(title: log.select2, number: Double(log.number2), color: .blue),

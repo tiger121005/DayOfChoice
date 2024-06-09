@@ -16,36 +16,23 @@ class HomeViewController: UIViewController {
     @IBOutlet var nameLabel: UILabel!
     @IBOutlet var idLabel: UILabel!
     @IBOutlet var copyLabel: UILabel!
+    @IBOutlet var resultBtn: UIButton!
+    @IBOutlet var logBtn: UIButton!
     
-    var friends: [Friend] = []
+    
+    let userFB = UserFirebase.shared
     let questionFB = QuestionFirebase.shared
     let friendFB = FriendFirebase.shared
+    
+    var friends: [Friend] = []
     var selectFriend: Friend!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        let realm: Realm = {
-//            var config = Realm.Configuration()
-//            let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.Ito.taiga.DayOfChoice")
-//            config.fileURL = url?.appendingPathComponent("db.realm")
-//            let realm = try! Realm(configuration: config)
-//            return realm
-//        }()
-            
-//        guard let data = realm.object(ofType: RealmData.self, forPrimaryKey: "0605") else {
-//            print("error get data")
-//            return
-//        }
-//        do {
-//            try realm.write {
-//                realm.delete(data)
-//            }
-//        } catch {
-//            print("Error delete")
-//        }
         Task {
             await setupLogData()
+            setupButton()
             setupTableView()
             setuplabel()
         }
@@ -63,6 +50,20 @@ class HomeViewController: UIViewController {
             let nextVC = segue.destination as! FriendViewController
             nextVC.friendData = selectFriend
         }
+    }
+    
+    func setupButton() {
+        logBtn.layer.borderWidth = 2.0
+        logBtn.layer.borderColor = UIColor.black.cgColor
+        logBtn.layer.cornerRadius = logBtn.frame.height / 2
+        logBtn.layer.cornerCurve = .continuous
+        logBtn.clipsToBounds = true
+        
+        resultBtn.layer.borderWidth = 2.0
+        resultBtn.layer.borderColor = UIColor.black.cgColor
+        resultBtn.layer.cornerRadius = resultBtn.frame.height / 2
+        resultBtn.layer.cornerCurve = .continuous
+        resultBtn.clipsToBounds = true
     }
 
     func setupTableView() {
@@ -136,16 +137,20 @@ class HomeViewController: UIViewController {
         }
         
         let change = UIAlertAction(title: "変更", style: .default) {action in
-            
-            guard let name = textFieldOnAlert.text else {
-                print("Error get new name")
-                return
+            Task {
+                
+                guard let name = textFieldOnAlert.text else {
+                    print("Error get new name")
+                    return
+                }
+                if name.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
+                    return
+                }
+                UserDefaultsKey.name.set(value: name)
+                await self.userFB.changeName(name: name)
+                self.nameLabel.text = name
+                
             }
-            if name.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
-                return
-            }
-            UserDefaultsKey.name.set(value: name)
-            self.nameLabel.text = name
         }
         
         alert.addAction(change)

@@ -35,15 +35,7 @@ class SecondTutorialViewController: UIViewController {
         let playerLayer = AVPlayerLayer(player: player)
         playerLayer.frame = CGRect(x: 0, y: 0, width: playerView.frame.width, height: playerView.frame.height)
         playerView.layer.addSublayer(playerLayer)
-//        if let url = URL(string: "https://サンプルURL.com/サンプル動画.mp4") {
-//            player = AVPlayer(data: )
-//            
-//            // AVPlayerの再生終了時の通知を受け取る
-//            NotificationCenter.default.addObserver(self, selector: #selector(playerDidFinishPlaying), name: .AVPlayerItemDidPlayToEndTime, object: player.currentItem)
-//            
-//            // 動画再生
-//            player.play()
-//        }
+        
     }
     
     @objc func playerDidFinishPlaying(note: NSNotification) {

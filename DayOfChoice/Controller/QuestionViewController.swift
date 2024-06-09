@@ -31,6 +31,7 @@ class QuestionViewController: UIViewController {
     @IBAction func select1() {
         selectNum = 1
         voteBtn.isEnabled = true
+        voteBtn.backgroundColor = .black
         voteBtn.layer.shadowColor = UIColor.black.cgColor
         
         select1Btn.layer.shadowColor = UIColor.red.cgColor
@@ -48,6 +49,7 @@ class QuestionViewController: UIViewController {
     @IBAction func select2() {
         selectNum = 2
         voteBtn.isEnabled = true
+        voteBtn.backgroundColor = .black
         voteBtn.layer.shadowColor = UIColor.black.cgColor
         
         select1Btn.layer.shadowColor = UIColor.black.cgColor
@@ -124,33 +126,26 @@ extension QuestionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        DebugManager.shared.updateData(id: "20240606")
         
         
         
         Task {
-//            await DebugManager.shared.getAllAnswers(id: UserDefaultsKey.uid.get()!)
-//            DebugManager.shared.addData()
             print(UserDefaultsKey.uid.get())
             checkFirst()
             await setupData()
             setupView()
             
-            
-//            DebugManager.shared.deleteFriend()
         }
         
     }
     
-    override func viewDidLayoutSubviews() {
-        
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
-        UserDefaultsKey.name.remove()
         
         if UserDefaultsKey.name.get() == nil {
+            
+            UserDefaultsKey.name.set(value: "")
             performSegue(withIdentifier: "toTutorial", sender: nil)
+            return
         }
         
         setName()
@@ -203,7 +198,7 @@ extension QuestionViewController {
                 
                 let user = authData.user
                 let uid = user.uid
-                UserDefaultsKey.uid.set(value: uid)
+                
                 if UserDefaultsKey.uid.get() != uid {
                     await userFB.createUser(id: uid)
                     UserDefaultsKey.uid.set(value: uid)
@@ -220,6 +215,7 @@ extension QuestionViewController {
             
             
             voteBtn.isEnabled = false
+            voteBtn.backgroundColor = .gray
             question = await questionFB.getTodayQuestion()
             guard let question else {
                 select1Btn.isEnabled = false
@@ -238,43 +234,20 @@ extension QuestionViewController {
     }
     
     func setName() {
-        if UserDefaultsKey.name.get() != nil {
+        if UserDefaultsKey.name.get() != "" {
             return
         }
         
         let alert = UIAlertController.addAlertWithValidation(register: { name in
-            UserDefaultsKey.name.set(value: name)
+            Task {
+                await self.userFB.changeName(name: name)
+                UserDefaultsKey.name.set(value: name)
+            }
         })
         present(alert, animated: true)
     }
     
-    func reSetName() {
-        let alert = UIAlertController(title: "ユーザーネーム", message: "ユーザーネームを設定してください", preferredStyle: .alert)
-        var textFieldOnAlert = UITextField()
-        
-        alert.addTextField { textField in
-            textFieldOnAlert = textField
-            textFieldOnAlert.returnKeyType = .done
-        }
-        
-        let set = UIAlertAction(title: "設定", style: .default) {_ in
-            guard let name = textFieldOnAlert.text else {
-                print("Error set name")
-                
-                self.dismiss(animated: true)
-                return
-            }
-            
-            if name.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
-                
-                self.dismiss(animated: true)
-                return
-            }
-            
-            UserDefaultsKey.name.set(value: name)
-            UserDefaultsKey.minor.set(value: "0")
-        }
-    }
+    
     
     func checkFirst() {
         

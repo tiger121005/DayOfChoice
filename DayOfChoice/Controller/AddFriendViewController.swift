@@ -37,7 +37,16 @@ class AddFriendViewController: UIViewController {
     }
     
     func setupBtn() {
+        becomeBtn.layer.cornerRadius = becomeBtn.frame.height / 2
+        becomeBtn.layer.cornerCurve = .continuous
+        becomeBtn.layer.shadowColor
         becomeBtn.isEnabled = false
+        becomeBtn.backgroundColor = .gray
+        
+        becomeBtn.layer.shadowColor = UIColor.white.cgColor
+        becomeBtn.layer.shadowOpacity = 0.4
+        becomeBtn.layer.shadowOffset = CGSize(width: 0, height: 5)
+        becomeBtn.layer.shadowRadius = CGFloat(5)
     }
     
     
@@ -64,11 +73,16 @@ class AddFriendViewController: UIViewController {
             }
             
             resultLabel.text = "\(friend.name)と友達になりました！"
+            
             becomeBtn.isEnabled = false
+            becomeBtn.layer.shadowColor = UIColor.white.cgColor
+            becomeBtn.backgroundColor = .gray
             
         } else {
             resultLabel.text = "\(friend.name)とはすでに友達です！"
             becomeBtn.isEnabled = false
+            becomeBtn.layer.shadowColor = UIColor.white.cgColor
+            becomeBtn.backgroundColor = .gray
         }
         
     }
@@ -96,13 +110,17 @@ extension AddFriendViewController: UISearchBarDelegate {
                 print("Cannot find user")
                 resultLabel.text = "ユーザーが見つかりませんでした"
                 becomeBtn.isEnabled = false
+                becomeBtn.layer.shadowColor = UIColor.white.cgColor
+                becomeBtn.backgroundColor = .gray
                 return
             }
             
             
             self.friend = friend
-            resultLabel.text = "\(friend.name)さんが見つかりました！"
+            resultLabel.text = "\(friend.name)が見つかりました！"
             becomeBtn.isEnabled = true
+            becomeBtn.layer.shadowColor = UIColor.black.cgColor
+            becomeBtn.backgroundColor = .black
             
         }
     }

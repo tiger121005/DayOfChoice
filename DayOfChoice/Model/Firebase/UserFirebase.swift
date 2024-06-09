@@ -31,15 +31,19 @@ class UserFirebase: ObservableObject {
         
     }
     
-//    func getUserInfo() async {
-//        Task {
-//            guard let uid = UserDefaultsKey.uid.get() else {
-//                print("Cannot get uid")
-//                return
-//            }
-//            manager.user = try await db.collection("user").document(uid).getDocument(as: User.self)
-//        }
-//    }
+    func changeName(name: String) async {
+        guard let id = UserDefaultsKey.uid.get() else {
+            print("Error get user id")
+            return
+        }
+        do {
+            try await db.collection("user").document(id).updateData([
+                "name": name
+            ])
+        } catch {
+            print("Error change name")
+        }
+    }
     
     
     func addAnswer(select: Int) async {
@@ -72,27 +76,6 @@ class UserFirebase: ObservableObject {
             }
         }
     }
-    
-//    func getAnswer() async {
-//        guard let uid = UserDefaultsKey.uid.get() else {
-//            return
-//        }
-//        do {
-//            let datas = try await db.collection("user").document(uid).collection("answers").getDocuments()
-//            self.manager.answers = []
-//            for document in datas.documents {
-//                if let answer = try? document.data(as: Answer.self) {
-//                    self.manager.answers.append(answer)
-//                }
-//            }
-//            self.manager.answers.sort(by: { Int($0.id!)! > Int($1.id!)! })
-//            print("manager1", ObjectIdentifier(self.manager))
-//            print("finish getAnswer")
-//        } catch {
-//            print("Error getting answers: \(error)")
-//        }
-//        
-//    }
     
     
     func addMinor() async {
@@ -132,6 +115,8 @@ class UserFirebase: ObservableObject {
             for document in snapshot.documents {
                 answers.append(try document.data(as: Answer.self))
             }
+            
+            answers.sort{ Int($0.id!)! > Int($1.id!)! }
             
             return answers
         } catch {

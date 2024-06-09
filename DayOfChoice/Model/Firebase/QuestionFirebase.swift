@@ -97,30 +97,6 @@ class QuestionFirebase: ObservableObject {
         }
     }
     
-//    func getPrequestion() async -> Question? {
-//        await withCheckedContinuation { continuation in
-//            if manager.answers.count < 2 {
-//                print("There is no data")
-//                return
-//            }
-//            let latest = manager.answers[1]
-//            let date = String(latest.id!.suffix(4))
-//            
-//            db.collection("question").document(date).getDocument { (document, err) in
-//                guard let document, document.exists else {
-//                    continuation.resume(returning: nil)
-//                    return
-//                }
-//                do {
-//                    let question = try document.data(as: Question.self)
-//                    continuation.resume(returning: question)
-//                } catch {
-//                    print("Error get question")
-//                    continuation.resume(returning: nil)
-//                }
-//            }
-//        }
-//    }
     
     func getPreResult(id: String, select: Int) async {
         var realm: Realm {
@@ -132,19 +108,6 @@ class QuestionFirebase: ObservableObject {
         }
         
         
-//        await MainActor.run {
-//            manager.logs = realm.objects(RealmData.self).map{Logs(question: $0.question, select1: $0.select1, select2: $0.select2, number1: $0.number1, number2: $0.number2, select: $0.select, id: $0.id)}.sorted(by: {Int($0.id)! > Int($1.id)!})
-//            if manager.logs.count < 2 {
-//                print("Error get pre result")
-//                return
-//            }
-//        }
-        
-//        if manager.logs.count < 2 {
-//            return
-//        }
-        
-//        let latest = manager.logs[1]
         let year = String(id.prefix(4))
         let date = String(id.suffix(4))
         guard let data = realm.object(ofType: RealmData.self, forPrimaryKey: id) else {
@@ -165,9 +128,6 @@ class QuestionFirebase: ObservableObject {
                         questionUpdate.number1 = result.number1
                         questionUpdate.number2 = result.number2
                     }
-                    
-//                    manager.logs[1].number1 = result.number1
-//                    manager.logs[1].number2 = result.number2
                 }
             }
             if result.number1 > result.number2 && select == 2 {
@@ -181,23 +141,4 @@ class QuestionFirebase: ObservableObject {
         }
     }
     
-//    func getResult(id: String) async -> Result? {
-//        await withCheckedContinuation {continuation in
-//            db.collection("question").document(String(id.suffix(4))).collection("results").document(String(id.prefix(4))).getDocument { (document, err) in
-//                guard let document, document.exists else {
-//                    print("Error get result")
-//                    continuation.resume(returning: nil)
-//                    return
-//                }
-//                do {
-//                    let result = try document.data(as: Result.self)
-//                    continuation.resume(returning: result)
-//                } catch {
-//                    print("Error get result")
-//                    continuation.resume(returning: nil)
-//                }
-//            }
-//        }
-//        
-//    }
 }

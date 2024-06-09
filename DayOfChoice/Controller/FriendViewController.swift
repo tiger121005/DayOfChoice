@@ -32,16 +32,12 @@ class FriendViewController: UIViewController {
             await getAnswers()
             await getQuestions()
         }
-//        questions = [Question(question: "bvaiurbva", select1: "nvie", select2: "bvnkaf", id: "20240604")]
-//        answers = [Answer(select: 2, id: "0604")]
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-//        Task {
-//            await getAnswers()
-//            await getQuestions()
-//        }
+        
     }
     
     func setupTableView() {
@@ -102,18 +98,27 @@ extension FriendViewController: UITableViewDataSource {
         }()
         
         print("answer id", answer.id)
-        guard let myAnser = realm.object(ofType: RealmData.self, forPrimaryKey: answer.id) else {
+        print("answer", answer.select)
+        
+        guard let myAnswer = realm.object(ofType: RealmData.self, forPrimaryKey: answer.id) else {
             print("Cannot find my answer")
             return cell
         }
         
-        if myAnser.select == 1 {
+        if myAnswer.select == 0 {
+            return cell
+        }
+        
+        print("myAnswer", myAnswer.select)
+        
+        
+        if myAnswer.select == 1 {
             cell.myAnswerLabel.text = question.select1
         } else {
             cell.myAnswerLabel.text = question.select2
         }
         
-        if myAnser.select == answer.select {
+        if myAnswer.select == answer.select {
             cell.matchView.backgroundColor = .green
             matchNum += 1
             

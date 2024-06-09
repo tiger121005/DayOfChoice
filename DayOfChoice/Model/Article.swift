@@ -72,16 +72,4 @@ enum UserDefaultsKey: String {
     func remove() {
         UserDefaults(suiteName: "group.com.Ito.taiga.DayOfChoice")?.removeObject(forKey: self.rawValue)
     }
-    
-//    func get() -> String? {
-//        return UserDefaults.standard.string(forKey: self.rawValue)
-//    }
-//
-//    func set(value: String) {
-//        UserDefaults.standard.set(value, forKey: self.rawValue)
-//    }
-//
-//    func remove() {
-//        UserDefaults.standard.removeObject(forKey: self.rawValue)
-//    }
 }

@@ -22,15 +22,7 @@ struct Utility {
     }
     
     
-    func updateTime() -> [Int] {
-        
-        let baseHour = 8
-        let material = Material.shared
-        let hour = baseHour + material.randomHours[dayOfYear() - 1]
-        let minute = material.randomMinute[dayOfYear() - 1]
-        
-        return [hour, minute]
-    }
+    
     
     func dayOfYear() -> Int {
         let currentDate = Date()
