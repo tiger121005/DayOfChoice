@@ -78,15 +78,6 @@ class ResultViewController: UIViewController {
     
     func setupData() async {
         
-        if manager.first {
-            
-        } else {
-            
-            
-        }
-        
-        
-        
         let realm: Realm = {
             var config = Realm.Configuration()
             let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.Ito.taiga.DayOfChoice")
@@ -97,6 +88,7 @@ class ResultViewController: UIViewController {
         
         let logs = realm.objects(RealmData.self).map{Logs(question: $0.question, select1: $0.select1, select2: $0.select2, number1: $0.number1, number2: $0.number2, select: $0.select, id: $0.id)}.sorted{Int($0.id)! > Int($1.id)!}
         
+        
         if logs.count < 2 {
             print("Cannot read question")
             
@@ -106,9 +98,19 @@ class ResultViewController: UIViewController {
         log = logs[1]
         
         
-        guard let log else {
+        guard var log else {
             print("Error get log")
             return
+        }
+        
+        if log.number1 + log.number2 == 0 {
+            await questionFB.getResult(id: log.id, select: log.select)
+            if let data = realm.object(ofType: RealmData.self, forPrimaryKey: log.id) {
+                log.number1 = data.number1
+                log.number2 = data.number2
+            }
+            
+            
         }
         
         Task { @MainActor in
@@ -149,7 +151,7 @@ class ResultViewController: UIViewController {
             return
         }
         
-        let redRate = redRate(number1: log.number1, number2: log.number2)
+        let redRate = redRate(number1: 30, number2: 70)
         
         rate1Label.text = "\(round(redRate * 1000) / 10)%"
         rate2Label.text = "\(100 - (round(redRate * 1000) / 10))%"

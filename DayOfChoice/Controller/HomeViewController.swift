@@ -91,7 +91,7 @@ class HomeViewController: UIViewController {
         
         let log = logs[1]
         
-        await questionFB.getPreResult(id: log.id, select: log.select)
+        await questionFB.getResult(id: log.id, select: log.select)
         dump(realm.objects(RealmData.self))
         
     }
@@ -107,13 +107,18 @@ class HomeViewController: UIViewController {
         
         let friendDatas = Array(realm.objects(FriendsData.self))
         
-        friends = []
+        if friendDatas.count == friends.count {
+            return
+        }
+        
         for data in friendDatas {
-            guard let name = await friendFB.getFriendName(id: data.id) else {
-                print("error get name")
-                continue
+            if friends.filter({$0.id == data.id}).isEmpty {
+                guard let name = await friendFB.getFriendName(id: data.id) else {
+                    print("Error get name")
+                    continue
+                }
+                friends.append(Friend(name: name, matchNum: data.matchNum, id: data.id))
             }
-            friends.append(Friend(name: name, matchNum: data.matchNum, id: data.id))
             
         }
         tableView.reloadData()

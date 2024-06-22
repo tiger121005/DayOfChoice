@@ -39,8 +39,7 @@ class LogViewController: UIViewController {
     
     func setupLogView() {
         
-        voteNumLabel.text = "\(logs.count - 1) 回"
-        
+                
         let red = CAGradientLayer()
         red.frame = CGRect(x: 0, y: 0, width: redBorder.frame.width, height: redBorder.frame.height)
         red.colors = material.redGradient
@@ -79,14 +78,37 @@ class LogViewController: UIViewController {
         
         
         
-        for log in logs {
+        for i in 0..<logs.count {
             
+            let log = logs[i]
             if log.id == todayID {
                 continue
             }
             
+            if log.number1 + log.number2 == 0 {
+                await questionFB.getResult(id: log.id, select: log.select)
+                guard let data = realm.object(ofType: RealmData.self, forPrimaryKey: log.id) else {
+                    print("Cannot get realm data")
+                    continue
+                }
+                logs[i].number1 = data.number1
+                logs[i].number2 = data.number2
+                
+            }
+            if log.number1 < log.number2 && log.select == 1 {
+                minor += 1
+            } else if log.number1 > log.number2 && log.select == 2 {
+                minor += 1
+            }
+            
         }
+        minorRateLabel.text = "\(round(Double(minor) / Double(logs.count - 1) * 1000) / 10) ％"
+        voteNumLabel.text = "\(logs.count - 1) 回"
         
+        for log in logs {
+            
+        }
+
         collectionView.reloadData()
     }
 
@@ -106,12 +128,7 @@ extension LogViewController: UICollectionViewDataSource {
         let datas = [ChartData(title: log.select2, number: Double(log.number2), color: .blue),
                      ChartData(title: log.select1, number: Double(log.number1), color: .red)]
         
-        if log.number1 < log.number2 && log.select == 1 {
-            minor += 1
-        } else if log.number1 > log.number2 && log.select == 2 {
-            minor += 1
-        }
-        minorRateLabel.text = "\(round(Double(minor) / Double(logs.count - 1) * 1000) / 10) ％"
+        
         
         
         cell.contentConfiguration = UIHostingConfiguration {
@@ -141,7 +158,7 @@ extension LogViewController: UICollectionViewDataSource {
                                 .foregroundStyle(Color.red)
                                 .font(.title3)
                             
-                            Text(datas[0].title)
+                            Text(log.select1)
                                 .foregroundStyle(Color.red)
                                 .font(.footnote)
                             
@@ -167,7 +184,7 @@ extension LogViewController: UICollectionViewDataSource {
                             Text("\(rate2(number1: log.number1, number2: log.number2)) %")
                                 .foregroundStyle(Color.blue)
                                 .font(.title3)
-                            Text(datas[1].title)
+                            Text(log.select2)
                                 .foregroundStyle(Color.blue)
                                 .font(.footnote)
                             

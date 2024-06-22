@@ -182,19 +182,15 @@ struct MediumWidget: View {
     
     var body: some View {
         VStack {
-            Text(entry.question)
+//            Text(entry.question)
+            Text("犬派？猫派？")
                 .frame(alignment: .center)
             
             HStack {
                 Button(intent: Select1Intent()) {
                     Text(entry.select1)
+                    Text("犬")
                         .frame(width: 120, height: 60)
-//                        .background(
-//                            RoundedRectangle(
-//                                cornerRadius: 10,
-//                                style: .continuous)
-//                            .fill(.red)
-//                        )
                         
                         
                 }
@@ -206,7 +202,8 @@ struct MediumWidget: View {
                 .tint(.white)
                 
                 Button(intent: Select2Intent()) {
-                    Text(entry.select2)
+//                    Text(entry.select2)
+                    Text("猫")
                         .frame(width: 120, height: 60)
                          
                 }

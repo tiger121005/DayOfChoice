@@ -19,6 +19,10 @@ public class FriendFirebase: ObservableObject {
     
     func searchFriend(id: String) async -> Friend? {
         do {
+            if id == "" {
+                return nil
+            }
+            
             let user = try await db.collection("user").document(id).getDocument().data(as: User.self)
             
             guard let id = user.id else {

@@ -98,7 +98,7 @@ class QuestionFirebase: ObservableObject {
     }
     
     
-    func getPreResult(id: String, select: Int) async {
+    func getResult(id: String, select: Int) async {
         var realm: Realm {
             var config = Realm.Configuration()
             let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.Ito.taiga.DayOfChoice")

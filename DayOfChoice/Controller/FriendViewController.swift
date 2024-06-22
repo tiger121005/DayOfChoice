@@ -111,6 +111,7 @@ extension FriendViewController: UITableViewDataSource {
         
         print("myAnswer", myAnswer.select)
         
+//        let mySelect = Int.random(in: 1...2)
         
         if myAnswer.select == 1 {
             cell.myAnswerLabel.text = question.select1

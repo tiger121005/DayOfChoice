@@ -126,9 +126,6 @@ extension QuestionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        
-        
         Task {
             print(UserDefaultsKey.uid.get())
             checkFirst()
@@ -230,6 +227,10 @@ extension QuestionViewController {
             self.select1Btn.setTitle(question.select1, for: .normal)
             self.select2Btn.setTitle(question.select2, for: .normal)
             
+//            self.questionLabel.text = "犬派？猫派？"
+//            self.questionLabel.naturalize()
+//            self.select1Btn.setTitle("犬", for: .normal)
+//            self.select2Btn.setTitle("猫", for: .normal)
         }
     }
     
